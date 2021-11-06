@@ -7,4 +7,4 @@ Vue.config.productionTip = false
 new Vue({
   router,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app') // 掛載到public/index.html中的#app上！
