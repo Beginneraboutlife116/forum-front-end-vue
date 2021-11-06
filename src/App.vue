@@ -3,7 +3,10 @@
     <NavBar /> 
     <!-- 因為是在vue template，所以這樣的命名是允許的！ -->
     <!-- 如果是globally registered的component就不能這樣命名，要依據w3s所提供HTML的規則，主要就是烤肉串命名的方式 -->
-    <main role="main" class="mt-5 bg-white">
+    <main
+      role="main"
+      class="mt-5 bg-white"
+    >
       <router-view />
     </main>
   </div>

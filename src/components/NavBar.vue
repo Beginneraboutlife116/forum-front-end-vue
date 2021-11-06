@@ -25,7 +25,10 @@
         class="navbar-collapse collapse"
       >
         <ul class="navbar-nav ms-auto">
-          <li class="nav-item" v-if="currentUser.isAdmin">
+          <li
+            v-if="currentUser.isAdmin"
+            class="nav-item"
+          >
             <router-link
               to="#"
               class="text-white me-3"
@@ -33,7 +36,10 @@
               管理員後台
             </router-link>
           </li>
-          <li class="nav-item" v-if="isAuthenticated">
+          <li
+            v-if="isAuthenticated"
+            class="nav-item"
+          >
             <router-link
               to="#"
               class="text-white me-3"
@@ -42,7 +48,10 @@
             </router-link>
           </li>
         </ul>
-        <button class="btn btn-sm btn-outline-success my-2 my-sm-0" v-if="isAuthenticated">
+        <button
+          v-if="isAuthenticated"
+          class="btn btn-sm btn-outline-success my-2 my-sm-0"
+        >
           登出
         </button>
       </div>
@@ -77,6 +86,9 @@ export default {
       isAuthenticated: false
     }
   },
+  created() {
+    this.fetchUser()
+  },
   methods: {
     fetchUser() {
       this.currentUser = {
@@ -85,9 +97,6 @@ export default {
       },
       this.isAuthenticated = dummyUser.isAuthenticated
     }
-  },
-  created() {
-    this.fetchUser()
   }
 }
 </script>
