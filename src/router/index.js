@@ -51,7 +51,8 @@ const routes = [
 
 const router = new VueRouter({
   mode: "hash", // default: hash, you could choose 'history'
-  routes
+  routes,
+  linkExactActiveClass: 'active'
 })
 
 export default router
