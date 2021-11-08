@@ -12,7 +12,14 @@
       />
     </div>
 
-    <!-- RestaurantsPagination -->
+    <RestaurantsPagination
+      v-if="totalPage.length > 1"
+      :category-id="categoryId"
+      :current-page="currentPage"
+      :total-page="totalPage"
+      :previous-page="previousPage"
+      :next-page="nextPage"
+    />
   </div>
 </template>
 
@@ -20,6 +27,7 @@
 import NavTabs from './../components/NavTabs.vue'
 import RestaurantCard from './../components/RestaurantCard.vue'
 import RestaurantsNavPills from './../components/RestaurantsNavPills.vue'
+import RestaurantsPagination from './../components/RestaurantsPagination.vue'
 
 const dummyData = {
   "restaurants": [ // RestaurantCard會用到的資料
@@ -296,7 +304,8 @@ export default {
   components: {
     NavTabs,
     RestaurantCard,
-    RestaurantsNavPills
+    RestaurantsNavPills,
+    RestaurantsPagination
   },
   data() {
     return {
