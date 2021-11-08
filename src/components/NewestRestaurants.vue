@@ -24,6 +24,7 @@
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 export default {
+  name: 'NewestRestaurants',
   filters: {
     fromNow(datetime) {
       if (!datetime) return '-'

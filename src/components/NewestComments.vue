@@ -28,6 +28,7 @@
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 export default {
+  name: 'NewestComments',
   filters: {
     fromNow(datetime) {
       if (!datetime) return ''

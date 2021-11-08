@@ -62,6 +62,7 @@
 
 <script>
 export default {
+  name: 'RestaurantCard',
   props: {
     initialRestaurant: {
       type: Object,

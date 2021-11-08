@@ -74,6 +74,7 @@ const dummyUser = {
 
 export default {
   // Vue 會在沒有資料時使用此預設值
+  name: 'NavBar',
   data() {
     return {
       currentUser: {

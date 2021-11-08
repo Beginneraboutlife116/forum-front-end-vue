@@ -1,10 +1,10 @@
 <template>
   <div class="container py-5">
     <NavTabs />
-    <!-- RestaurantsNavPills -->
+
+    <RestaurantsNavPills :categories="categories" />
 
     <div class="row">
-      <!-- RestaurantCard -->
       <RestaurantCard
         v-for="restaurant of restaurants"
         :key="restaurant.id"
@@ -19,6 +19,7 @@
 <script>
 import NavTabs from './../components/NavTabs.vue'
 import RestaurantCard from './../components/RestaurantCard.vue'
+import RestaurantsNavPills from './../components/RestaurantsNavPills.vue'
 
 const dummyData = {
   "restaurants": [ // RestaurantCard會用到的資料
@@ -294,7 +295,8 @@ export default {
   name: 'Restaurants',
   components: {
     NavTabs,
-    RestaurantCard
+    RestaurantCard,
+    RestaurantsNavPills
   },
   data() {
     return {
