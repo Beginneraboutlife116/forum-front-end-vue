@@ -27,7 +27,7 @@
           v-if="restaurant.isFavorited"
           type="button"
           class="btn btn-danger btn-border favorite me-2"
-          @click.stop.prevent="deleteFavorite"
+          @click.stop.prevent="deleteFromFavorite"
         >
           移除最愛
         </button>
@@ -35,7 +35,7 @@
           v-else
           type="button"
           class="btn btn-primary btn-border favorite me-2"
-          @click.stop.prevent="addFavorite"
+          @click.stop.prevent="addToFavorite"
         >
           加到最愛
         </button>
@@ -43,7 +43,7 @@
           v-if="restaurant.isLiked"
           type="button"
           class="btn btn-danger like me-2"
-          @click.stop.prevent="deleteLike"
+          @click.stop.prevent="deleteFromLike"
         >
           Unlike
         </button>
@@ -51,7 +51,7 @@
           v-else
           type="button"
           class="btn btn-primary like me-2"
-          @click.stop.prevent="addLike"
+          @click.stop.prevent="addToLike"
         >
           Like
         </button>
@@ -71,30 +71,37 @@ export default {
   },
   data() {
     return {
-      restaurant: {...this.initialRestaurant}
-      // restaurant: this.initialRestaurant
+      restaurant: this.initialRestaurant
       // 先複製一份起來不是更保險嗎？這樣就可以如下方like function作法，不用寫太多程式碼
+      // restaurant: {...this.initialRestaurant}
     }
   },
   methods: {
-    addFavorite() {
+    addToFavorite() {
       this.restaurant = {
         ...this.restaurant,
         isFavorited: true
       }
     },
-    deleteFavorite() {
+    deleteFromFavorite() {
       this.restaurant = {
         ...this.restaurant,
         isFavorited: false
       }
-      // 保留下來觀看差異，主要是因為一開始並沒有複製props
     },
-    addLike() {
-      this.restaurant.isLiked = true
+    addToLike() {
+      this.restaurant = {
+        ...this.restaurant,
+        isLiked: true
+      }
     },
-    deleteLike() {
-      this.restaurant.isLiked = false
+    deleteFromLike() {
+      this.restaurant = {
+        ...this.restaurant,
+        isLiked: false
+      }
+      // this.restaurant.isLiked = false
+      // 上面是如果一開始就有複製的話，可以這樣做
     }
   }
 }
