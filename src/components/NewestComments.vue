@@ -25,16 +25,11 @@
 </template>
 
 <script>
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { fromNowFilter } from '../mixins/fromNowFilter'
 
 export default {
   name: 'NewestComments',
-  filters: {
-    fromNow(datetime) {
-      if (!datetime) return ''
-      return formatDistanceToNow(new Date(datetime), { addSuffix: true })
-    }
-  },
+  mixins: [fromNowFilter],
   props: {
     newestComments: {
       type: Array,

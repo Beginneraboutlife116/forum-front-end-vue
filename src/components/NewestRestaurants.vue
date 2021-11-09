@@ -21,16 +21,11 @@
 </template>
 
 <script>
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { fromNowFilter } from '../mixins/fromNowFilter'
 
 export default {
   name: 'NewestRestaurants',
-  filters: {
-    fromNow(datetime) {
-      if (!datetime) return '-'
-      return formatDistanceToNow(new Date(datetime), { addSuffix: true })
-    }
-  },
+  mixins: [fromNowFilter],
   props: {
     newestRestaurants: {
       type: Array,
