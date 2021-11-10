@@ -10,12 +10,12 @@
       >
       <div class="card-body">
         <p class="card-text">
-          <a
-            href="#"
+          <router-link
+            :to="{ name: 'restaurant' , params: {id: restaurant.id}}"
             class="text-decoration-none"
           >
             {{ restaurant.name }}
-          </a>
+          </router-link>
         </p>
         <span class="badge bg-secondary"> {{ restaurant.Category.name }} </span>
         <p class="card-text text-truncate">

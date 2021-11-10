@@ -2,14 +2,22 @@
   <div class="container py-5">
     <RestaurantDetail :initial-restaurant="restaurant" />
 
-    <RestaurantComments :restaurant-comments="restaurantComments" />
+    <RestaurantComments
+      :restaurant-comments="restaurantComments"
+      @after-delete-comment="afterDeleteComment"
+    />
     <!-- 新增評論 CreateComment -->
+    <CreateComment
+      :restaurant-id="restaurant.id"
+      @after-create-comment="afterCreateComment"
+    />
   </div>
 </template>
 
 <script>
 import RestaurantDetail from './../components/RestaurantDetail.vue'
 import RestaurantComments from './../components/RestaurantComments.vue'
+import CreateComment from '../components/CreateComment.vue'
 
 const dummyData = {
   "restaurant": {
@@ -93,11 +101,23 @@ const dummyData = {
   "isLiked": false
 }
 
+const dummyUser = {
+  currentUser: {
+    id: 1,
+    name: "root",
+    email: "root@example.com",
+    image: null,
+    isAdmin: true
+  },
+  isAuthenticated: true
+}
+
 export default {
   name: 'Restaurant',
   components: {
     RestaurantDetail,
-    RestaurantComments
+    RestaurantComments,
+    CreateComment
   },
   data() {
     return {
@@ -114,7 +134,8 @@ export default {
         isFavorited: false,
         isLiked: false
       },
-      restaurantComments: []
+      restaurantComments: [],
+      currentUser: dummyUser.currentUser
     }
   },
   created() {
@@ -141,6 +162,22 @@ export default {
         isLiked
       }
       this.restaurantComments = dummyData.restaurant.Comments
+    },
+    afterDeleteComment(commentId) {
+      this.restaurantComments = this.restaurantComments.filter(comment => comment.id !== commentId)
+    },
+    afterCreateComment(payload) {
+      const { commentId, restaurantId, text } = payload
+      this.restaurantComments.push({
+        id: commentId,
+        RestaurantId: restaurantId,
+        text,
+        User: {
+          id: this.currentUser.id,
+          name: this.currentUser.name
+        },
+        createdAt: new Date()
+      })
     }
   }
 }
