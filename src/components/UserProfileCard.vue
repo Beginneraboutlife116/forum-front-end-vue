@@ -40,7 +40,7 @@
             @submit.stop.prevent="followOrUnfollow"
           >
             <button
-              v-if="isAdmin"
+              v-if="profile.isAdmin"
               class="btn btn-primary"
               type="submit"
             >
@@ -84,7 +84,6 @@ export default {
   data() {
     return {
       isFollowed: this.initialIsFollowed,
-      isAdmin: this.profile.isAdmin
     }
   },
   methods: {
