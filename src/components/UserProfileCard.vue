@@ -37,10 +37,17 @@
           <p />
           <form
             style="display: contents;"
-            @submit.stop.prevent="followUser"
+            @submit.stop.prevent="followOrUnfollow"
           >
             <button
-              v-if="!isFollowed"
+              v-if="isAdmin"
+              class="btn btn-primary"
+              type="submit"
+            >
+              Edit
+            </button>
+            <button
+              v-else-if="!isFollowed"
               class="btn btn-primary"
               type="submit"
             >
@@ -76,11 +83,13 @@ export default {
   },
   data() {
     return {
-      isFollowed: this.initialIsFollowed
+      isFollowed: this.initialIsFollowed,
+      isAdmin: this.profile.isAdmin
     }
   },
   methods: {
-    followUser() {
+    followOrUnfollow() {
+      if (this.isAdmin) return
       this.isFollowed ? (this.isFollowed = false) : (this.isFollowed = true)
     }
   }

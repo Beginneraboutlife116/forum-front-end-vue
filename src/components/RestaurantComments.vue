@@ -18,12 +18,13 @@
           Delete
         </button>
         <h3>
-          <a
+          <router-link
+            :to="{name: 'user', params: {id: comment.User.id}}"
             href="#"
             class="text-decoration-none"
           >
             {{ comment.User.name }}
-          </a>
+          </router-link>
         </h3>
         <p> {{ comment.text }} </p>
         <footer class="blockquote-footer">
@@ -37,7 +38,7 @@
 
 <script>
 import { fromNowFilter } from '../mixins/fromNowFilter'
-import {forNavbarAndRestaurantComments as dummyUser} from '../fakedata/dummyDatas.js'
+import { forNavbarAndRestaurantComments as dummyUser} from '../fakedata/dummyDatas.js'
 
 export default {
   name: 'RestaurantComments',
@@ -50,8 +51,11 @@ export default {
   },
   data() {
     return {
-      currentUser: dummyUser.currentUser
+      currentUser: {}
     }
+  },
+  created() {
+    this.fetchUser()
   },
   methods: {
     handleDeleteButtonClick(commentId) {
@@ -59,6 +63,9 @@ export default {
       // TODO: 請求 API 伺服器刪除 id 為 commentId 的評論
       // 觸發父層事件 - $emit( '事件名稱' , 傳遞的資料 )
       this.$emit('after-delete-comment', commentId)
+    },
+    fetchUser() {
+      this.currentUser = { ...dummyUser.currentUser }
     }
   }
 }

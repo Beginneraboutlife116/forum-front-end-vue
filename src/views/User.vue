@@ -44,7 +44,8 @@ export default {
         comments: [],
         favoritedRestaurants: [],
         followers: [],
-        followings: []
+        followings: [],
+        isAdmin: false,
       },
       isFollowed: false,
     }
@@ -55,7 +56,7 @@ export default {
   methods: {
     fetchUserProfile() {
       const { profile } = dummyData
-      const { id, name, email, image, Comments, FavoritedRestaurants, Followers, Followings } = profile
+      const { id, name, email, image, Comments, FavoritedRestaurants, Followers, Followings, isAdmin } = profile
       this.profile = {
         id,
         name,
@@ -64,7 +65,8 @@ export default {
         comments: Comments,
         favoritedRestaurants: FavoritedRestaurants,
         followers: Followers,
-        followings: Followings
+        followings: Followings,
+        isAdmin
       }
     }
   }

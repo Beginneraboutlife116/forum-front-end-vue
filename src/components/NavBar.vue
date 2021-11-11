@@ -41,7 +41,7 @@
             class="nav-item"
           >
             <router-link
-              to="#"
+              :to="{name: 'user', params: {id: currentUser.id}}"
               class="text-white me-3"
             >
               {{ currentUser.name || '使用者' }} 您好
