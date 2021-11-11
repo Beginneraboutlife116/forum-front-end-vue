@@ -74,6 +74,7 @@ export default {
       restaurant: this.initialRestaurant
       // 先複製一份起來不是更保險嗎？這樣就可以如下方like function作法，不用寫太多程式碼
       // restaurant: {...this.initialRestaurant}
+      // 上面的方法會遇到淺拷貝的問題
     }
   },
   methods: {
