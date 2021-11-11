@@ -5,12 +5,12 @@
   >
     <div class="row g-0">
       <div class="col-md-4">
-        <a href="#">
+        <router-link :to="{name: 'restaurant', params: {id: topRestaurant.id}}">
           <img
             class="card-img"
             :src="topRestaurant.image"
           >
-        </a>
+        </router-link>
       </div>
       <div class="col-md-8">
         <div class="card-body">
@@ -52,6 +52,7 @@
 
 <script>
 export default {
+  name: 'TopRestaurantCard',
   props: {
     initialRestaurant: {
       type: Object,

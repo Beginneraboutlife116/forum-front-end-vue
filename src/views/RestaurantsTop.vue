@@ -183,6 +183,7 @@ const dummyData = {
 
 import NavTabs from './../components/NavTabs.vue'
 export default {
+  name: 'RestaurantsTop',
   components: {
     NavTabs,
     TopRestaurantCard

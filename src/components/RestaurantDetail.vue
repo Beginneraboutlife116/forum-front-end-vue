@@ -31,10 +31,12 @@
     </div>
     <div class="col-lg-8">
       <p> {{ restaurant.description }} </p>
-      <a
+      <router-link
         class="btn btn-primary btn-border me-2"
-        href="#"
-      >Dashboard</a>
+        :to="newRoute"
+      >
+        Dashboard
+      </router-link>
 
       <button
         v-if="restaurant.isFavorited"
@@ -83,22 +85,40 @@ export default {
   },
   data() {
     return {
-      restaurant: {...this.initialRestaurant}
+      restaurant: this.initialRestaurant
+      // 留意這是淺拷貝的問題
+    }
+  },
+  computed: {
+    newRoute() {
+      return `/restaurants/${this.restaurant.id}/dashboard`
     }
   },
   methods: {
     addToFavorite() {
-      this.restaurant.isFavorited = true
+      this.restaurant = {
+        ...this.initialRestaurant,
+        isFavorited: true
+      }
     },
     deleteFromFavorite() {
-      this.restaurant.isFavorited = false
+      this.restaurant = {
+        ...this.initialRestaurant,
+        isFavorited: false
+      }
     },
     addToLike() {
-      this.restaurant.isLiked = true
+      this.restaurant = {
+        ...this.initialRestaurant,
+        isLiked: true
+      }
     },
     deleteFromLike() {
-      this.restaurant.isLiked = false
-    }
+      this.restaurant = {
+        ...this.initialRestaurant,
+        isLiked: false
+      }
+    },
   }
 }
 </script>
