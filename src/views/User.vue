@@ -55,8 +55,8 @@ export default {
   },
   methods: {
     fetchUserProfile() {
-      const { profile } = dummyData
-      const { id, name, email, image, Comments, FavoritedRestaurants, Followers, Followings, isAdmin } = profile
+      const { profile: copyProfile } = dummyData
+      const { id, name, email, image, Comments, FavoritedRestaurants, Followers, Followings, isAdmin } = copyProfile
       this.profile = {
         id,
         name,
