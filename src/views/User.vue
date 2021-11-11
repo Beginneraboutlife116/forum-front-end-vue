@@ -1,7 +1,10 @@
 <template>
   <div class="album py-5 bg-light">
     <div class="container">
-      <!-- UserProfileCard.vue -->
+      <UserProfileCard
+        :profile="profile"
+        :initial-is-followed="isFollowed"
+      />
       <div class="row">
         <div class="col-md-4">
           <!-- UserFollowingsCard -->
@@ -17,9 +20,13 @@
 </template>
 
 <script>
+import UserProfileCard from '../components/UserProfileCard.vue'
 import { forUser as dummyData } from '../fakedata/dummyDatas'
 
 export default {
+  components: {
+    UserProfileCard
+  },
   data() {
     return {
       profile: {
@@ -28,7 +35,7 @@ export default {
         email: '',
         image: '',
         comments: [],
-        favoriteRestaurants: [],
+        favoritedRestaurants: [],
         followers: [],
         followings: []
       },
@@ -41,14 +48,14 @@ export default {
   methods: {
     fetchUserProfile() {
       const { profile } = dummyData
-      const { id, name, email, image, Comments, FavoriteRestaurants, Followers, Followings } = profile
+      const { id, name, email, image, Comments, FavoritedRestaurants, Followers, Followings } = profile
       this.profile = {
         id,
         name,
         email,
         image,
         comments: Comments,
-        favoriteRestaurants: FavoriteRestaurants,
+        favoritedRestaurants: FavoritedRestaurants,
         followers: Followers,
         followings: Followings
       }
