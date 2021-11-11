@@ -7,8 +7,8 @@
       />
       <div class="row">
         <div class="col-md-4">
-          <!-- UserFollowingsCard -->
-          <!-- UserFollowersCard -->
+          <UserFollowingsAndFollowersCard :group="profile.followings" />
+          <UserFollowingsAndFollowersCard :group="profile.followers" />
         </div>
         <div class="col-md-8">
           <!-- UserCommentsCard -->
@@ -21,11 +21,14 @@
 
 <script>
 import UserProfileCard from '../components/UserProfileCard.vue'
+import UserFollowingsAndFollowersCard from '../components/UserFollowingsAndFollowersCard.vue'
+
 import { forUser as dummyData } from '../fakedata/dummyDatas'
 
 export default {
   components: {
-    UserProfileCard
+    UserProfileCard,
+    UserFollowingsAndFollowersCard
   },
   data() {
     return {
@@ -63,3 +66,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.card.col-md-4 {
+  padding: 0;
+}
+</style>
