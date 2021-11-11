@@ -1,5 +1,5 @@
 # forum-front-end-vue
-It's a forum for restaurants, and it's built by Vue framework.
+It's a forum for restaurants, and it's built by the Vue framework.
 
 ## Project setup
 ```
