@@ -12,7 +12,7 @@
         </div>
         <div class="col-md-8">
           <UserCommentsCard :comments="profile.comments" />
-          <!-- UserFavoritedRestaurantsCard -->
+          <UserFavoritedRestaurantsCard :favorited-restaurants="profile.favoritedRestaurants" />
         </div>
       </div>
     </div>
@@ -23,6 +23,7 @@
 import UserProfileCard from '../components/UserProfileCard.vue'
 import UserFollowingsAndFollowersCard from '../components/UserFollowingsAndFollowersCard.vue'
 import UserCommentsCard from '../components/UserCommentsCard.vue'
+import UserFavoritedRestaurantsCard from '../components/UserFavoritedRestaurantsCard.vue'
 
 import { forUser as dummyData } from '../fakedata/dummyDatas'
 
@@ -30,7 +31,8 @@ export default {
   components: {
     UserProfileCard,
     UserFollowingsAndFollowersCard,
-    UserCommentsCard
+    UserCommentsCard,
+    UserFavoritedRestaurantsCard
   },
   data() {
     return {
