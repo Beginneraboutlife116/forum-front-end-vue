@@ -23,7 +23,7 @@
 
 <script>
 export default {
-  name: 'UserFollowingCardbody',
+  name: 'UserFollowingsAndFollowersCard',
   props: {
     group: {
       type: Array,

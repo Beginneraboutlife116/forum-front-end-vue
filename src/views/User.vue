@@ -11,7 +11,7 @@
           <UserFollowingsAndFollowersCard :group="profile.followers" />
         </div>
         <div class="col-md-8">
-          <!-- UserCommentsCard -->
+          <UserCommentsCard :comments="profile.comments" />
           <!-- UserFavoritedRestaurantsCard -->
         </div>
       </div>
@@ -22,13 +22,15 @@
 <script>
 import UserProfileCard from '../components/UserProfileCard.vue'
 import UserFollowingsAndFollowersCard from '../components/UserFollowingsAndFollowersCard.vue'
+import UserCommentsCard from '../components/UserCommentsCard.vue'
 
 import { forUser as dummyData } from '../fakedata/dummyDatas'
 
 export default {
   components: {
     UserProfileCard,
-    UserFollowingsAndFollowersCard
+    UserFollowingsAndFollowersCard,
+    UserCommentsCard
   },
   data() {
     return {
