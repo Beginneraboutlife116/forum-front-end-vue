@@ -5,9 +5,10 @@
       followings（追蹤者）
     </div>
     <div class="card-body">
-      <a
+      <router-link
         v-for="individual of group"
         :key="individual.id"
+        :to="{ name: 'user', params: {id: individual.id}}"
         class="me-1"
       >
         <img
@@ -16,7 +17,7 @@
           width="60"
           height="60"
         >
-      </a>
+      </router-link>
     </div>
   </div>
 </template>

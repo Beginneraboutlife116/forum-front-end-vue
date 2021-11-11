@@ -5,9 +5,10 @@
       收藏的餐聽
     </div>
     <div class="card-body">
-      <a
+      <router-link
         v-for="restaurant of favoritedRestaurants"
         :key="restaurant.id"
+        :to="{name: 'restaurant', params: {id: restaurant.id}}"
       >
         <img
           :src="restaurant.image"
@@ -15,7 +16,7 @@
           width="60"
           height="60"
         >
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
