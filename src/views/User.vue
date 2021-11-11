@@ -22,7 +22,36 @@ import { forUser as dummyData } from '../fakedata/dummyDatas'
 export default {
   data() {
     return {
-      profile: dummyData.profile
+      profile: {
+        id: -1,
+        name: '',
+        email: '',
+        image: '',
+        comments: [],
+        favoriteRestaurants: [],
+        followers: [],
+        followings: []
+      },
+      isFollowed: false,
+    }
+  },
+  created() {
+    this.fetchUserProfile()
+  },
+  methods: {
+    fetchUserProfile() {
+      const { profile } = dummyData
+      const { id, name, email, image, Comments, FavoriteRestaurants, Followers, Followings } = profile
+      this.profile = {
+        id,
+        name,
+        email,
+        image,
+        comments: Comments,
+        favoriteRestaurants: FavoriteRestaurants,
+        followers: Followers,
+        followings: Followings
+      }
     }
   }
 }
