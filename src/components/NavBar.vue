@@ -30,7 +30,7 @@
             class="nav-item"
           >
             <router-link
-              to="#"
+              to="/admin/restaurants"
               class="text-white me-3"
             >
               管理員後台

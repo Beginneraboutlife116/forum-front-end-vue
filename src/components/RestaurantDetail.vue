@@ -9,7 +9,7 @@
     <div class="col-lg-4">
       <img
         class="img-fluid d-block mx-auto" 
-        :src="restaurant.image || 'http://via.placeholder.com/300x300?text=No+Image'"
+        :src="restaurant.image || emptyImage"
         style="width: 250px; margin-bottom: 25px;"
       >
       <div class="contact-info-wrap">
@@ -75,8 +75,11 @@
 </template>
 
 <script>
+import emptyImageFilter from './../mixins/emptyImageFilter.js'
+
 export default {
   name: 'RestaurantDetail',
+  mixins: [emptyImageFilter],
   props: {
     initialRestaurant: {
       type: Object,
@@ -87,11 +90,6 @@ export default {
     return {
       restaurant: this.initialRestaurant
       // 留意這是淺拷貝的問題
-    }
-  },
-  computed: {
-    newRoute() {
-      return `/restaurants/${this.restaurant.id}/dashboard`
     }
   },
   methods: {

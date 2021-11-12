@@ -12,7 +12,7 @@
         class="me-1"
       >
         <img
-          :src="individual.image"
+          :src="individual.image | emptyImage"
           class="avatar rounded"
           width="60"
           height="60"
@@ -23,8 +23,11 @@
 </template>
 
 <script>
+import emptyImageFilter from './../mixins/emptyImageFilter.js'
+
 export default {
   name: 'UserFollowingsAndFollowersCard',
+  mixins: [emptyImageFilter],
   props: {
     group: {
       type: Array,

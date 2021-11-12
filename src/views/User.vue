@@ -61,7 +61,7 @@ export default {
         id,
         name,
         email,
-        image,
+        image: image ? image : 'http://via.placeholder.com/300x300?text=No+Image',
         comments: Comments,
         favoritedRestaurants: FavoritedRestaurants,
         followers: Followers,

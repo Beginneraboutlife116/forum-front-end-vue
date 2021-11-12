@@ -3,7 +3,7 @@
     <div class="row g-0">
       <div class="col-md-4">
         <img
-          :src="profile.image || 'https://via.placeholder.com/300'"
+          :src="profile.image"
           width="300px"
           height="300px"
         >
