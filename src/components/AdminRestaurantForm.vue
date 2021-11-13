@@ -135,7 +135,7 @@
 </template>
 
 <script>
-import { forAdminRestaurantForm as dummyData } from '../fakedata/dummyDatas.js'
+import { categoriesForAdminRestaurantFormAndAdminCategories as dummyData } from '../fakedata/dummyDatas.js'
 
 export default {
   props: {

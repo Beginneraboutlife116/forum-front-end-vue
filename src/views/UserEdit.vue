@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { forUser as dummyData } from '../fakedata/dummyDatas'
+import { forUserAndUserEdit as dummyData } from '../fakedata/dummyDatas'
 
 export default {
   name: 'UserEdit',

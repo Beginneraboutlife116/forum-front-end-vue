@@ -25,7 +25,7 @@ import UserFollowingsAndFollowersCard from '../components/UserFollowingsAndFollo
 import UserCommentsCard from '../components/UserCommentsCard.vue'
 import UserFavoritedRestaurantsCard from '../components/UserFavoritedRestaurantsCard.vue'
 
-import { forUser as dummyData } from '../fakedata/dummyDatas'
+import { forUserAndUserEdit as dummyData } from '../fakedata/dummyDatas'
 
 export default {
   components: {

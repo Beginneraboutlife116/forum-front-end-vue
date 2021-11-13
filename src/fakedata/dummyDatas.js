@@ -1,4 +1,4 @@
-export const forUser = {
+export const forUserAndUserEdit = {
   'profile': {
     'id': 1,
     'name': 'root',
@@ -3229,7 +3229,7 @@ export const forAdminRestaurant = {
   }
 }
 
-export const forAdminRestaurantForm = {
+export const categoriesForAdminRestaurantFormAndAdminCategories = {
     "categories": [
         {
             "id": 1,
