@@ -39,13 +39,13 @@
             style="display: contents;"
             @submit.stop.prevent="followOrUnfollow"
           >
-            <button
+            <router-link
               v-if="profile.isAdmin"
               class="btn btn-primary"
-              type="submit"
+              :to="{name: 'user-edit', params: {id: profile.id}}"
             >
               Edit
-            </button>
+            </router-link>
             <button
               v-else-if="!isFollowed"
               class="btn btn-primary"

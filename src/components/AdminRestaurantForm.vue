@@ -7,7 +7,7 @@
       >Name</label>
       <input
         id="name"
-        v-model="restaurant.name"
+        v-model.trim="restaurant.name"
         type="text"
         class="form-control"
         name="name"
@@ -23,7 +23,7 @@
       >Category</label>
       <select
         id="categoryId"
-        v-model="restaurant.categoryId"
+        v-model.trim="restaurant.categoryId"
         class="form-control"
         name="categoryId"
         required
@@ -52,7 +52,7 @@
       >Tel</label>
       <input
         id="tel"
-        v-model="restaurant.tel"
+        v-model.trim="restaurant.tel"
         type="text"
         class="form-control"
         name="tel"
@@ -67,7 +67,7 @@
       >Address</label>
       <input
         id="address"
-        v-model="restaurant.address"
+        v-model.trim="restaurant.address"
         type="text"
         class="form-control"
         placeholder="Enter address"
@@ -82,7 +82,7 @@
       >Opening Hours</label>
       <input
         id="opening-hours"
-        v-model="restaurant.openingHours"
+        v-model.trim="restaurant.openingHours"
         type="time"
         class="form-control"
         name="opening_hours"
@@ -96,7 +96,7 @@
       >Description</label>
       <textarea
         id="description"
-        v-model="restaurant.description"
+        v-model.trim="restaurant.description"
         class="form-control"
         rows="3"
         name="description"
@@ -111,7 +111,7 @@
       <img
         v-if="restaurant.image"
         :src="restaurant.image"
-        class="img-thumbnail d-block mb-3 revoke-it"
+        class="img-thumbnail d-block mb-3"
         width="200"
         height="200"
       >
@@ -175,7 +175,7 @@ export default {
         this.restaurant.image = ''
         return
       } else {
-        const imageURL = window.URL.createObjectURL(files[0])
+        const imageURL = URL.createObjectURL(files[0])
         this.restaurant.image = imageURL
       }
     },
