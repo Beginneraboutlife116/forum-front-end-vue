@@ -67,6 +67,7 @@
             <span
               v-show="category.isEditing"
               class="cancel"
+              @click="cancelEdit(category.id)"
             >✕</span>
           </td>
           <td class="d-flex justify-content-between">
@@ -82,6 +83,7 @@
               v-show="category.isEditing"
               type="button"
               class="btn btn-link me-2 text-decoration-none"
+              @click.stop.prevent="updateCategory({ categoryId: category.id, name: category.name })"
             >
               Save
             </button>
@@ -125,7 +127,8 @@ export default {
       this.categories = dummyData.categories.map(category => {
         return {
           ...category,
-          isEditing: false
+          isEditing: false,
+          nameCached: ''
         }
       })
     },
@@ -154,6 +157,24 @@ export default {
         return category
       })
     },
+    updateCategory({categoryId, name}) {
+      // TODO: 透過 API 去向伺服器更新餐廳類別名稱
+      this.toggleIsEditing(categoryId)
+      console.log(name)
+    },
+    cancelEdit(categoryId) {
+      this.categories = this.categories.map(category => {
+        if (category.id === categoryId) {
+          return {
+            ...category,
+            name: category.nameCached,
+            isEditing: false
+          }
+        }
+        return category
+      })
+      // this.toggleIsEditing(categoryId)
+    }
   }
 }
 </script>
