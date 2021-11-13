@@ -31,16 +31,18 @@
         <td>{{ restaurant.name }}</td>
         <td class="d-flex justify-content-between">
           <router-link
-            :to="{name: 'admin-restaurant', params: {id: restaurant.id}}"
+            :to="{name: 'admin-restaurant', params: {id: restaurant.id }}"
             class="btn btn-link text-decoration-none"
           >
             Show
           </router-link>
 
-          <a
-            href="#"
+          <router-link
+            :to="{name: 'admin-restaurant-edit', params: { id: restaurant.id }}"
             class="btn btn-link text-decoration-none"
-          >Edit</a>
+          >
+            Edit
+          </router-link>
 
           <button
             type="button"

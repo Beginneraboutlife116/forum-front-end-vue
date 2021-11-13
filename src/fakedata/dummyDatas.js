@@ -3228,3 +3228,72 @@ export const forAdminRestaurant = {
     }
   }
 }
+
+export const forAdminRestaurantForm = {
+    "categories": [
+        {
+            "id": 1,
+            "name": "中式料理",
+            "createdAt": "2021-11-05T03:55:21.000Z",
+            "updatedAt": "2021-11-05T03:55:21.000Z"
+        },
+        {
+            "id": 2,
+            "name": "日本料理",
+            "createdAt": "2021-11-05T03:55:21.000Z",
+            "updatedAt": "2021-11-05T03:55:21.000Z"
+        },
+        {
+            "id": 3,
+            "name": "義大利料理",
+            "createdAt": "2021-11-05T03:55:21.000Z",
+            "updatedAt": "2021-11-05T03:55:21.000Z"
+        },
+        {
+            "id": 4,
+            "name": "墨西哥料理",
+            "createdAt": "2021-11-05T03:55:21.000Z",
+            "updatedAt": "2021-11-05T03:55:21.000Z"
+        },
+        {
+            "id": 5,
+            "name": "素食料理",
+            "createdAt": "2021-11-05T03:55:21.000Z",
+            "updatedAt": "2021-11-05T03:55:21.000Z"
+        },
+        {
+            "id": 6,
+            "name": "美式料理",
+            "createdAt": "2021-11-05T03:55:21.000Z",
+            "updatedAt": "2021-11-05T03:55:21.000Z"
+        },
+        {
+            "id": 7,
+            "name": "複合式料理",
+            "createdAt": "2021-11-05T03:55:21.000Z",
+            "updatedAt": "2021-11-05T03:55:21.000Z"
+        }
+    ]
+}
+
+export const forAdminRestaurantEdit = {
+    "restaurant": {
+        "id": 1,
+        "name": "Amina Larkin",
+        "tel": "006.348.4894 x471",
+        "address": "38084 Bashirian Estate",
+        "opening_hours": "08:00",
+        "description": "veniam in minus",
+        "image": "https://loremflickr.com/320/240/restaurant,food/?random=23.157825066855974",
+        "viewCounts": 1,
+        "createdAt": "2021-11-05T03:55:21.000Z",
+        "updatedAt": "2021-11-09T08:10:37.000Z",
+        "CategoryId": 3,
+        "Category": {
+            "id": 3,
+            "name": "義大利料理",
+            "createdAt": "2021-11-05T03:55:21.000Z",
+            "updatedAt": "2021-11-05T03:55:21.000Z"
+        }
+    }
+}

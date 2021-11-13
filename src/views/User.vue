@@ -58,6 +58,7 @@ export default {
       const { profile: copyProfile } = dummyData
       const { id, name, email, image, Comments, FavoritedRestaurants, Followers, Followings, isAdmin } = copyProfile
       this.profile = {
+        ...copyProfile,
         id,
         name,
         email,
