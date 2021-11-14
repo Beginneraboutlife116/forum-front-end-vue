@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import {forNavbarAndRestaurantComments as dummyUser} from '../fakedata/dummyDatas.js'
+import {currentUserForNavbarAndRestaurantCommentsAndAdminUsers as dummyUser} from '../fakedata/dummyDatas.js'
 
 export default {
   // Vue 會在沒有資料時使用此預設值

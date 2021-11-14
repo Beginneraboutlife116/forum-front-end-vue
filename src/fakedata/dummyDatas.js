@@ -2197,7 +2197,7 @@ export const forRestaurantsTop = {
   ]
 }
 
-export const forNavbarAndRestaurantComments = {
+export const currentUserForNavbarAndRestaurantCommentsAndAdminUsers = {
   currentUser: {
     id: 1,
     name: '管理者',
@@ -3296,4 +3296,39 @@ export const forAdminRestaurantEdit = {
             "updatedAt": "2021-11-05T03:55:21.000Z"
         }
     }
+}
+
+export const usersForAdminUsers = {
+    "users": [
+        {
+            "id": 1,
+            "name": "root",
+            "email": "root@example.com",
+            "password": "$2a$10$6RaicCQtuc3V1fqOV6kRXeVUlRtinNPqGIfdIzxk8ssx3F.4i8pJm",
+            "isAdmin": true,
+            "image": null,
+            "createdAt": "2021-11-05T03:55:21.000Z",
+            "updatedAt": "2021-11-05T03:55:21.000Z"
+        },
+        {
+            "id": 2,
+            "name": "user1",
+            "email": "user1@example.com",
+            "password": "$2a$10$s/g.WV6HuLIpeBVCPx/nm.76XI31zEBXdmOsqQFtM1s/ISJbzWW7m",
+            "isAdmin": false,
+            "image": null,
+            "createdAt": "2021-11-05T03:55:21.000Z",
+            "updatedAt": "2021-11-05T03:55:21.000Z"
+        },
+        {
+            "id": 3,
+            "name": "user2",
+            "email": "user2@example.com",
+            "password": "$2a$10$ocEpcuzrgpC.PW6ID7Rf2.4iL/Wmnc6dGsCm7ipAyBlpNJaWgHz5K",
+            "isAdmin": false,
+            "image": null,
+            "createdAt": "2021-11-05T03:55:21.000Z",
+            "updatedAt": "2021-11-05T03:55:21.000Z"
+        }
+    ]
 }

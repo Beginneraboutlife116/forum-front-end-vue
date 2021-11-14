@@ -38,7 +38,7 @@
 
 <script>
 import { fromNowFilter } from '../mixins/fromNowFilter'
-import { forNavbarAndRestaurantComments as dummyUser} from '../fakedata/dummyDatas.js'
+import { currentUserForNavbarAndRestaurantCommentsAndAdminUsers as dummyUser} from '../fakedata/dummyDatas.js'
 
 export default {
   name: 'RestaurantComments',
