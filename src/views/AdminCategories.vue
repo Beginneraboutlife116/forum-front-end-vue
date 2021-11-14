@@ -168,12 +168,13 @@ export default {
           return {
             ...category,
             name: category.nameCached,
-            isEditing: false
+            // isEditing: false
+            // 讓動作分割為單一function，降低耦合
           }
         }
         return category
       })
-      // this.toggleIsEditing(categoryId)
+      this.toggleIsEditing(categoryId)
     }
   }
 }
