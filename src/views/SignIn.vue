@@ -70,6 +70,9 @@
 </template>
 
 <script>
+import authorizationAPI from '@/apis/authorization.js'
+import { Toast } from '@/mixins/helpers.js'
+
 export default {
   data() {
     return {
@@ -79,12 +82,34 @@ export default {
   },
   methods: {
     handleSubmit() {
-      const data = JSON.stringify({
+      if (!this.email || !this.password) {
+        Toast.fire({
+          icon: 'warning',
+          title: '請填入 email 和 password'
+        })
+      }
+
+      authorizationAPI.signIn({
         email: this.email,
         password: this.password
+
+      }).then(response => {
+        const { data } = response
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        localStorage.setItem('token', data.token)
+        this.$router.push('/restaurants')
+
+      }).catch(error => {
+        this.password = ''
+        Toast.fire({
+          icon: 'warning',
+          title: '請確認您輸入了正確的帳號密碼'
+        })
+
+        console.log('Error', error)
       })
-      // TODO: 向後端驗證使用者登入資訊是否合法
-      console.log('data: ', data)
     }
   }
 }
