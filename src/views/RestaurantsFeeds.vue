@@ -24,7 +24,7 @@
 import NavTabs from './../components/NavTabs.vue'
 import NewestRestaurants from './../components/NewestRestaurants.vue'
 import NewestComments from './../components/NewestComments.vue'
-import restaurantsFeedsAPI from '@/apis/restaurantsFeeds.js'
+import restaurantsAPI from '@/apis/restaurants.js'
 import { Toast } from '@/mixins/helpers.js'
 
 export default {
@@ -46,7 +46,7 @@ export default {
   methods: {
     async fetchFeeds() {
       try {
-        const response = await restaurantsFeedsAPI.getRestaurantsFeeds()
+        const response = await restaurantsAPI.getFeeds()
         console.log('response: ', response)
         const { restaurants, comments } = response.data
         this.restaurants = restaurants
