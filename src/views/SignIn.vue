@@ -48,6 +48,7 @@
       <div class="d-grid">
         <button
           class="btn btn-lg btn-primary mb-3"
+          :disabled="isProcessing"
           type="submit"
         >
           Submit
@@ -77,39 +78,39 @@ export default {
   data() {
     return {
       email: '',
-      password: ''
+      password: '',
+      isProcessing: false
     }
   },
   methods: {
-    handleSubmit() {
-      if (!this.email || !this.password) {
-        Toast.fire({
-          icon: 'warning',
-          title: '請填入 email 和 password'
+    async handleSubmit() {
+      try {
+        if (!this.email || !this.password) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請填入 email 和 password'
+          })
+        }
+        this.isProcessing = true
+
+        const { data } = await authorizationAPI.signIn({
+          email: this.email,
+          password: this.password
         })
-      }
-
-      authorizationAPI.signIn({
-        email: this.email,
-        password: this.password
-
-      }).then(response => {
-        const { data } = response
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
         localStorage.setItem('token', data.token)
         this.$router.push('/restaurants')
-
-      }).catch(error => {
+      } catch (error) {
         this.password = ''
         Toast.fire({
           icon: 'warning',
           title: '請確認您輸入了正確的帳號密碼'
-        })
-
-        console.log('Error', error)
-      })
+        }) 
+        this.isProcessing = false
+        console.log('error: ', error)
+      }
     }
   }
 }
