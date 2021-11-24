@@ -24,7 +24,8 @@
 import NavTabs from './../components/NavTabs.vue'
 import NewestRestaurants from './../components/NewestRestaurants.vue'
 import NewestComments from './../components/NewestComments.vue'
-import { forRestaurantsFeeds as dummyData } from '../fakedata/dummyDatas.js'
+import restaurantsFeedsAPI from '@/apis/restaurantsFeeds.js'
+import { Toast } from '@/mixins/helpers.js'
 
 export default {
   name: 'RestaurantsFeeds',
@@ -43,10 +44,20 @@ export default {
     this.fetchFeeds()
   },
   methods: {
-    fetchFeeds() {
-      this.restaurants = dummyData.restaurants
-      this.comments = dummyData.comments.filter(comment => comment.Restaurant && comment.text)
-      // 很棒的方法！
+    async fetchFeeds() {
+      try {
+        const response = await restaurantsFeedsAPI.getRestaurantsFeeds()
+        console.log('response: ', response)
+        const { restaurants, comments } = response.data
+        this.restaurants = restaurants
+        this.comments = comments.filter(comment => comment.Restaurant && comment.text)
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得餐廳資料，請稍後再嘗試'
+        })
+        console.log('error: ', error)
+      }
     }
   }
 }
