@@ -103,10 +103,9 @@
 
 <script>
 import AdminNav from '@/components/AdminNav'
-import { v4 as uuidv4 } from 'uuid'
 import format from 'date-fns/format'
-
-import { categoriesForAdminRestaurantFormAndAdminCategories as dummyData} from '../fakedata/dummyDatas.js'
+import adminAPI from '@/apis/admin.js'
+import { Toast } from '@/mixins/helpers.js'
 
 export default {
   name: 'AdminCategories',
@@ -123,24 +122,45 @@ export default {
     this.fetchCategories()
   },
   methods: {
-    fetchCategories () {
-      this.categories = dummyData.categories.map(category => {
-        return {
-          ...category,
-          isEditing: false,
-          nameCached: ''
-        }
-      })
+    async fetchCategories () {
+      try {
+        const { data } = await adminAPI.categories.get()
+        this.categories = data.categories.map(category => {
+          return {
+            ...category,
+            isEditing: false,
+            nameCached: ''
+          }
+        })
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法讀取類別資料，請稍後嘗試'
+        })
+        console.log('error: ', error)
+      }
     },
-    createCategory() {
+    async createCategory() {
       // TODO: 透過 API 告知伺服器要新增的餐廳類別
-      this.categories.push({
-        id: uuidv4(),
-        name: this.newCategoryName,
-        createdAt: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
-        updatedAt: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx")
-      })
-      this.newCategoryName = ''
+      try {
+        const { data } = await adminAPI.categories.create({ name: this.newCategoryName })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.categories.push({
+          id: data.categoryId,
+          name: this.newCategoryName,
+          createdAt: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx"),
+          updatedAt: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx")
+        })
+        this.newCategoryName = ''
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: error.message ? error.message : '無法建立新類別，請稍後再試'
+        })
+        console.log('error: ', error)
+      }
     },
     deleteCategory(categoryId) {
       this.categories = this.categories.filter(category => category.id !== categoryId)
