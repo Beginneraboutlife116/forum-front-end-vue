@@ -58,7 +58,8 @@
 </template>
 
 <script>
-import { forAdminRestaurantsTable as dummyData} from '../fakedata/dummyDatas.js'
+import adminAPI from '@/apis/admin.js'
+import { Toast } from '@/mixins/helpers.js'
 
 export default {
   data () {
@@ -70,11 +71,36 @@ export default {
     this.fetchRestaurants()
   },
   methods: {
-    fetchRestaurants () {
-      this.restaurants = dummyData.restaurants
+    async fetchRestaurants () {
+      try {
+        const { data } = await adminAPI.restaurants.get()
+        this.restaurants = data.restaurants 
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法讀取餐廳資料，請稍後再試'
+        })
+        console.log('error: ', error)
+      }
     },
-    deleteRestaurant(restaurantId) {
-      this.restaurants = this.restaurants.filter(restaurant => restaurant.id !== restaurantId)
+    async deleteRestaurant(restaurantId) {
+      try {
+        const { data } = await adminAPI.restaurants.delete({ restaurantId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.restaurants = this.restaurants.filter(restaurant => restaurant.id !== restaurantId)
+        Toast.fire({
+          icon: 'success',
+          title: '刪除餐廳成功'
+        })
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法將餐廳刪除，請稍後再試'
+        })
+        console.log('error: ', error)
+      }
     }
   }
 }
