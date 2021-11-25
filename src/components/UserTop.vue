@@ -56,7 +56,6 @@ export default {
         }
         this.user.isFollowed = true
         this.user.FollowerCount = this.user.FollowerCount + 1
-        this.$emit('update-user', this.user)
       } catch(error) {
         Toast.fire({
           icon: 'error',
@@ -73,7 +72,6 @@ export default {
         }
         this.user.isFollowed = false
         this.user.FollowerCount = this.user.FollowerCount - 1
-        this.$emit('update-user', this.user)
       } catch(error) {
         Toast.fire({
           icon: 'error',

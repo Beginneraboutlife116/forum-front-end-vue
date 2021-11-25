@@ -11,7 +11,6 @@
         v-for="user of users"
         :key="user.id"
         :initial-user="user"
-        @update-user="updateUser"
       />
     </div>
   </div>
@@ -51,19 +50,6 @@ export default {
         })
         console.log('error: ', error)
       }
-    },
-    updateUser(payload) {
-      this.users = this.users.map(user => {
-        if (user.id === payload.id) {
-          return {
-            ...user,
-            isFollowed: payload.isFollowed,
-            followerCount: payload.followerCount
-          }
-        } else {
-          return user
-        }
-      })
     }
   }
 }
