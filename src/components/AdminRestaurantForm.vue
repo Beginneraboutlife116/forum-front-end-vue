@@ -1,5 +1,8 @@
 <template>
-  <form @submit.stop.prevent="handleSubmit">
+  <form
+    v-show="!isLoading"
+    @submit.stop.prevent="handleSubmit"
+  >
     <div class="form-group mb-2">
       <label
         for="name"
@@ -57,6 +60,7 @@
         class="form-control"
         name="tel"
         placeholder="Enter telephone number"
+        required
       >
     </div>
 
@@ -128,14 +132,16 @@
     <button
       type="submit"
       class="btn btn-primary btn-lg"
+      :disabled="isProcessing"
     >
-      送出
+      {{ isProcessing ? '處理中' : '送出' }}
     </button>
   </form>
 </template>
 
 <script>
-import { categoriesForAdminRestaurantFormAndAdminCategories as dummyData } from '../fakedata/dummyDatas.js'
+import adminAPI from '@/apis/admin.js'
+import { Toast } from '@/mixins/helpers.js'
 
 export default {
   props: {
@@ -151,12 +157,19 @@ export default {
         openingHours: ''
       })
       // { return {} } 物件外面的小括號是特殊的寫法，是因為object literal本身就是{}，所以return 簡寫要使用小括號包住
+    },
+    isProcessing: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      restaurant: {},
-      categories: []
+      restaurant: {
+        ...this.initialRestaurant
+      },
+      categories: [],
+      isLoading: true
     }
   },
   created() {
@@ -166,11 +179,22 @@ export default {
     }
   },
   methods: {
-    fetchCategories() {
-      this.categories = dummyData.categories
+    async fetchCategories() {
+      try {
+        const { data } = await adminAPI.categories.get()
+        this.categories = data.categories
+        this.isLoading = false
+      } catch(error) {
+        this.isLoading = false
+        Toast.fire({
+          icon: 'error',
+          title: '無法讀取類別資料，請稍後再試'
+        })
+        console.log('error: ', error)
+      }
     },
-    handleFileChange() {
-      const { files } = event.target
+    handleFileChange(e) {
+      const { files } = e.target
       if (!files.length) {
         this.restaurant.image = ''
         return
@@ -179,8 +203,32 @@ export default {
         this.restaurant.image = imageURL
       }
     },
-    handleSubmit(){
-      const form = event.target
+    handleSubmit(e){
+      if (!this.restaurant.name) {
+        Toast.fire({
+          icon: 'warning',
+          title: '請輸入餐廳名稱'
+        })
+        return
+      }
+
+      if (this.restaurant.categoryId === -1) {
+        Toast.fire({
+          icon: 'warning',
+          title: '請選擇餐廳類別'
+        })
+        return
+      }
+
+      if (!this.restaurant.tel) {
+        Toast.fire({
+          icon: 'warning',
+          title: '請輸入餐廳電話'
+        })
+        return
+      }
+
+      const form = e.target
       const formData = new FormData(form)
       this.$emit('after-submit', formData)
     }
