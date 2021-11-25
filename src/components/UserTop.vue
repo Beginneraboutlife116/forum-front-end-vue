@@ -14,7 +14,7 @@
         v-if="user.isFollowed"
         type="button"
         class="btn btn-danger"
-        @click.stop.prevent="cancelFollowUser"
+        @click.stop.prevent="cancelFollowUser(user.id)"
       >
         取消追蹤
       </button>
@@ -22,7 +22,7 @@
         v-else
         type="button"
         class="btn btn-primary"
-        @click.stop.prevent="followUser"
+        @click.stop.prevent="followUser(user.id)"
       >
         追蹤
       </button>
@@ -31,6 +31,9 @@
 </template>
 
 <script>
+import usersAPI from '@/apis/users.js'
+import { Toast } from '@/mixins/helpers.js'
+
 export default {
   name: 'UserTop',
   props: {
@@ -45,11 +48,39 @@ export default {
     }
   },
   methods: {
-    followUser() {
-      this.user.isFollowed = true
+    async followUser(userId) {
+      try {
+        const { data } = await usersAPI.followUser({ userId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.user.isFollowed = true
+        this.user.FollowerCount = this.user.FollowerCount + 1
+        this.$emit('update-user', this.user)
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法將達人加入追蹤，請稍後再試'
+        })
+        console.log('error: ', error)
+      }
     },
-    cancelFollowUser() {
-      this.user.isFollowed = false
+    async cancelFollowUser(userId) {
+      try {
+        const { data } = await usersAPI.cancelFollowUser({ userId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.user.isFollowed = false
+        this.user.FollowerCount = this.user.FollowerCount - 1
+        this.$emit('update-user', this.user)
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法將達人取消追蹤，請稍後再試'
+        })
+        console.log('error: ', error)
+      }
     }
   }
 }

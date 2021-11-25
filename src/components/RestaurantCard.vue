@@ -27,7 +27,7 @@
           v-if="restaurant.isFavorited"
           type="button"
           class="btn btn-danger btn-border favorite me-2"
-          @click.stop.prevent="deleteFromFavorite"
+          @click.stop.prevent="deleteFromFavorite(restaurant.id)"
         >
           移除最愛
         </button>
@@ -35,7 +35,7 @@
           v-else
           type="button"
           class="btn btn-primary btn-border favorite me-2"
-          @click.stop.prevent="addToFavorite"
+          @click.stop.prevent="addToFavorite(restaurant.id)"
         >
           加到最愛
         </button>
@@ -43,7 +43,7 @@
           v-if="restaurant.isLiked"
           type="button"
           class="btn btn-danger like me-2"
-          @click.stop.prevent="deleteFromLike"
+          @click.stop.prevent="deleteFromLike(restaurant.id)"
         >
           Unlike
         </button>
@@ -51,7 +51,7 @@
           v-else
           type="button"
           class="btn btn-primary like me-2"
-          @click.stop.prevent="addToLike"
+          @click.stop.prevent="addToLike(restaurant.id)"
         >
           Like
         </button>
@@ -62,6 +62,8 @@
 
 <script>
 import emptyImageFilter from './../mixins/emptyImageFilter.js'
+import { Toast } from '@/mixins/helpers.js'
+import usersAPI from '@/apis/users.js'
 
 export default {
   name: 'RestaurantCard',
@@ -81,31 +83,77 @@ export default {
     }
   },
   methods: {
-    addToFavorite() {
-      this.restaurant = {
-        ...this.restaurant,
-        isFavorited: true
+    async addToFavorite(restaurantId) {
+      try {
+        const { data } = await usersAPI.addToFavorite({restaurantId})
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.restaurant = {
+          ...this.restaurant,
+          isFavorited: true
+        }
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法將餐廳加入最愛，請稍候嘗試'
+        })
+        console.log('error: ', error)
       }
     },
-    deleteFromFavorite() {
-      this.restaurant = {
-        ...this.restaurant,
-        isFavorited: false
+    async deleteFromFavorite(restaurantId) {
+      try {
+        const { data } = await usersAPI.deleteFromFavorite({ restaurantId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.restaurant = {
+          ...this.restaurant,
+          isFavorited: false
+        }
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法將餐廳刪除最愛，請稍後再試'
+        })
+        console.log('error: ', error)
       }
     },
-    addToLike() {
-      this.restaurant = {
-        ...this.restaurant,
-        isLiked: true
+    async addToLike(restaurantId) {
+      try {
+        const { data } = await usersAPI.addToLike({ restaurantId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.restaurant = {
+          ...this.restaurant,
+          isLiked: true
+        }
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法將餐廳加入喜愛，請稍後再嘗試'
+        })
+        console.log('error: ', error)
       }
     },
-    deleteFromLike() {
-      this.restaurant = {
-        ...this.restaurant,
-        isLiked: false
+    async deleteFromLike(restaurantId) {
+      try {
+        const { data } = await usersAPI.deleteFromLike({ restaurantId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.restaurant = {
+          ...this.restaurant,
+          isLiked: false
+        }
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法將餐廳從喜愛刪除，請稍後再嘗試'
+        })
+        console.log('error: ', error)
       }
-      // this.restaurant.isLiked = false
-      // 上面是如果一開始就有複製的話，可以這樣做
     }
   }
 }

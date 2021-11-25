@@ -11,6 +11,7 @@
         v-for="user of users"
         :key="user.id"
         :initial-user="user"
+        @update-user="updateUser"
       />
     </div>
   </div>
@@ -19,7 +20,8 @@
 <script>
 import NavTabs from './../components/NavTabs.vue'
 import UserTop from './../components/UserTop.vue'
-import { forUsersTop as dummyData } from '../fakedata/dummyDatas.js'
+import usersAPI from '@/apis/users.js'
+import { Toast } from '@/mixins/helpers.js'
 
 export default {
   name: 'UsersTop',
@@ -36,8 +38,32 @@ export default {
     this.fetchUsers()
   },
   methods: {
-    fetchUsers() {
-      this.users = [ ...dummyData.users ]
+    async fetchUsers() {
+      try {
+        const { data } = await usersAPI.getTopUsers()
+        this.users = data.users.sort((a, b) => {
+          return a.id - b.id
+        })
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法讀取美食達人資料，請稍後再嘗試'
+        })
+        console.log('error: ', error)
+      }
+    },
+    updateUser(payload) {
+      this.users = this.users.map(user => {
+        if (user.id === payload.id) {
+          return {
+            ...user,
+            isFollowed: payload.isFollowed,
+            followerCount: payload.followerCount
+          }
+        } else {
+          return user
+        }
+      })
     }
   }
 }
