@@ -84,6 +84,7 @@
         <button
           class="btn btn-lg btn-primary mb-3"
           type="submit"
+          :disabled="isProcessing"
         >
           Submit
         </button>
@@ -105,25 +106,60 @@
 </template>
 
 <script>
+import authorizationAPI from '@/apis/authorization.js'
+import { Toast } from '@/mixins/helpers.js'
+
 export default {
   data() {
     return {
       name: '',
       email: '',
       password: '',
-      passwordCheck: ''
+      passwordCheck: '',
+      isProcessing: false
     }
   },
   methods: {
-    handleSubmit() {
-      const data = JSON.stringify({
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        passwordCheck: this.passwordCheck
-      })
-      // TODO: 向後端驗證使用者登入資訊是否合法
-      console.log('data: ', data)
+    async handleSubmit() {
+      try {
+        if (!this.name || !this.email || !this.password || !this.passwordCheck) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請確認所有資料都已填妥'
+          })
+          return
+        }
+        if (this.password !== this.passwordCheck) {
+          Toast.fire({
+            icon: 'warning',
+            title: '密碼與確認密碼不符，請再確認'
+          })
+          this.passwordCheck = ''
+          return
+        }
+        this.isProcessing = true
+        const { data } = await authorizationAPI.signUp({
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          passwordCheck: this.passwordCheck
+        })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        Toast.fire({
+          icon: 'success',
+          title: '已成功註冊'
+        })
+        this.$router.push({ name: 'sign-in'})
+      } catch(error) {
+        this.isProcessing = false
+        Toast.fire({
+          icon: 'error',
+          title: `無法註冊：${error.message}`
+        })
+        console.log('error: ', error)
+      }
     }
   }
 }

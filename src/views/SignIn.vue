@@ -90,6 +90,7 @@ export default {
             icon: 'warning',
             title: '請填入 email 和 password'
           })
+          return
         }
         this.isProcessing = true
 
