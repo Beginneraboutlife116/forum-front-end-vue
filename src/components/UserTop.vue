@@ -2,7 +2,7 @@
   <div class="col-3">
     <router-link :to="{ name:'user', params: {id: user.id}}">
       <img
-        :src="user.image || 'http://via.placeholder.com/300x300?text=No+Image'" 
+        :src="user.image | emptyImage" 
         width="140px"
         height="140px"
       >
@@ -31,11 +31,13 @@
 </template>
 
 <script>
+import emptyImageFilter from './../mixins/emptyImageFilter.js'
 import usersAPI from '@/apis/users.js'
 import { Toast } from '@/mixins/helpers.js'
 
 export default {
   name: 'UserTop',
+  mixins: [emptyImageFilter],
   props: {
     initialUser: {
       type: Object,

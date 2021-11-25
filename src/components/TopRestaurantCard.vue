@@ -32,7 +32,7 @@
             v-if="topRestaurant.isFavorited"
             type="button"
             class="btn btn-danger me-2"
-            @click.stop.prevent="deleteFromFavorite"
+            @click.stop.prevent="deleteFromFavorite(topRestaurant.id)"
           >
             移除最愛
           </button>
@@ -40,7 +40,7 @@
             v-else
             type="button"
             class="btn btn-primary"
-            @click.stop.prevent="addToFavorite"
+            @click.stop.prevent="addToFavorite(topRestaurant.id)"
           >
             加到最愛
           </button>
@@ -52,6 +52,8 @@
 
 <script>
 import emptyImageFilter from './../mixins/emptyImageFilter.js'
+import { Toast } from '@/mixins/helpers.js'
+import usersAPI from '@/apis/users.js'
 
 export default {
   name: 'TopRestaurantCard',
@@ -68,16 +70,42 @@ export default {
     }
   },
   methods: {
-    addToFavorite() {
-      this.topRestaurant = {
-        ...this.topRestaurant,
-        isFavorited: true
+    async addToFavorite(restaurantId) {
+      try {
+        const { data } = await usersAPI.addToFavorite({ restaurantId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.topRestaurant = {
+          ...this.topRestaurant,
+          isFavorited: true,
+          FavoriteCount: this.topRestaurant.FavoriteCount + 1
+        }
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法將餐廳加入最愛，請稍候嘗試'
+        })
+        console.log('error: ', error)
       }
     },
-    deleteFromFavorite() {
-      this.topRestaurant = {
-        ...this.topRestaurant,
-        isFavorited: false
+    async deleteFromFavorite(restaurantId) {
+      try {
+        const { data } = await usersAPI.deleteFromFavorite({ restaurantId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.topRestaurant = {
+          ...this.topRestaurant,
+          isFavorited: false,
+          FavoriteCount: this.topRestaurant.FavoriteCount - 1
+        }
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法將餐廳刪除最愛，請稍後再試'
+        })
+        console.log('error: ', error)
       }
     }
   }

@@ -15,7 +15,8 @@
 
 <script>
 import TopRestaurantCard from '../components/TopRestaurantCard.vue'
-import { forRestaurantsTop as dummyData } from '../fakedata/dummyDatas.js'
+import restaurantsAPI from '@/apis/restaurants.js'
+import { Toast } from '@/mixins/helpers.js'
 
 import NavTabs from './../components/NavTabs.vue'
 export default {
@@ -30,11 +31,22 @@ export default {
     }
   },
   created() {
-    this.fetccRestaurantsTop()
+    this.fetchRestaurantsTop()
   },
   methods: {
-    fetccRestaurantsTop() {
-      this.restaurants = [...dummyData.restaurants]
+    async fetchRestaurantsTop() {
+      try {
+        const { data } = await restaurantsAPI.getTopRestaurants()
+        this.restaurants = data.restaurants.sort((a, b) => {
+          return a.id - b.id
+        })
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得人氣餐廳資料，請稍後再試'
+        })
+        console.log('error', error)
+      }
     }
   }
 }
