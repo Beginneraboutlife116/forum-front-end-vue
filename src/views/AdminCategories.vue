@@ -149,7 +149,6 @@ export default {
           icon: 'error',
           title: '無法讀取類別資料，請稍後嘗試'
         })
-        console.log('error: ', error)
       }
     },
     async createCategory() {
@@ -181,7 +180,6 @@ export default {
           icon: 'error',
           title: error.message ? error.message : '無法建立新類別，請稍後再試'
         })
-        console.log('error: ', error)
       }
     },
     async deleteCategory(categoryId) {
@@ -203,7 +201,6 @@ export default {
           icon: 'error',
           title: '無法刪除餐廳類別，請稍後再試'
         })
-        console.log('error: ', error)
       }
     },
     toggleIsEditing (categoryId) {
@@ -238,7 +235,6 @@ export default {
           icon: 'error',
           title: '無法更新餐廳類別名稱，請稍後再試'
         })
-        console.log('error: ', error)
       }
     },
     cancelEdit(categoryId) {
