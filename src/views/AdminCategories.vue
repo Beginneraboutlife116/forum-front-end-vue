@@ -87,6 +87,7 @@
               v-show="category.isEditing"
               type="button"
               class="btn btn-link me-2 text-decoration-none"
+              :disabled="category.isProcessing"
               @click.stop.prevent="updateCategory({ categoryId: category.id, name: category.name })"
             >
               Save
@@ -217,10 +218,28 @@ export default {
         return category
       })
     },
-    updateCategory({categoryId, name}) {
-      // TODO: 透過 API 去向伺服器更新餐廳類別名稱
-      this.toggleIsEditing(categoryId)
-      console.log(name)
+    async updateCategory({categoryId, name}) {
+      const category = this.categories.find(category => category.id === categoryId)
+      try {
+        category.isProcessing = true
+        const { data } = await adminAPI.categories.update({ categoryId, name })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        category.isProcessing = false
+        Toast.fire({
+          icon: 'success',
+          title: '成功更新餐廳名稱類別'
+        })
+        this.toggleIsEditing(categoryId)
+      } catch (error) {
+        category.isProcessing = false
+        Toast.fire({
+          icon: 'error',
+          title: '無法更新餐廳類別名稱，請稍後再試'
+        })
+        console.log('error: ', error)
+      }
     },
     cancelEdit(categoryId) {
       this.categories = this.categories.map(category => {
@@ -228,8 +247,6 @@ export default {
           return {
             ...category,
             name: category.nameCached,
-            // isEditing: false
-            // 讓動作分割為單一function，降低耦合
           }
         }
         return category
