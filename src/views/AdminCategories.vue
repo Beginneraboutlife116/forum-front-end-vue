@@ -160,12 +160,24 @@ export default {
           })
           return
         }
+
+        if (this.categories.some(category => category.name === this.newCategoryName)) {
+          Toast.fire({
+            icon: 'warning',
+            title: '已有同名稱的餐廳類別'
+          })
+          return
+        }
         
         this.isProcessing = true
         const { data } = await adminAPI.categories.create({ name: this.newCategoryName })
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
+        Toast.fire({
+          icon: 'success',
+          title: '成功新增餐廳類別'
+        })
         this.categories.push({
           id: data.categoryId,
           name: this.newCategoryName,
@@ -216,6 +228,13 @@ export default {
       })
     },
     async updateCategory({categoryId, name}) {
+      if (this.categories.some(category => category.name === name)) {
+        Toast.fire({
+          icon: 'warning',
+          title: '已有相同名稱的餐廳類別'
+        })
+        return
+      }
       const category = this.categories.find(category => category.id === categoryId)
       try {
         category.isProcessing = true
