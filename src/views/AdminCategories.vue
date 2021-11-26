@@ -1,12 +1,15 @@
 <template>
-  <div class="container py-5">
+  <div
+    v-show="!isLoading"
+    class="container py-5"
+  >
     <AdminNav />
 
     <form class="my-4">
       <div class="row">
         <div class="col-auto">
           <input
-            v-model="newCategoryName"
+            v-model.trim="newCategoryName"
             type="text"
             class="form-control"
             placeholder="新增餐廳類別..."
@@ -16,9 +19,10 @@
           <button
             type="button"
             class="btn btn-primary"
+            :disabled="isProcessing"
             @click.stop.prevent="createCategory"
           >
-            新增
+            {{ isProcessing ? '新增中' : '新增' }}
           </button>
         </div>
       </div>
@@ -90,6 +94,7 @@
             <button
               type="button"
               class="btn btn-link me-2 text-decoration-none"
+              :disabled="category.isProcessing"
               @click.stop.prevent="deleteCategory(category.id)"
             >
               Delete
@@ -115,7 +120,9 @@ export default {
   data () {
     return {
       categories: [],
-      newCategoryName: ''
+      newCategoryName: '',
+      isLoading: false,
+      isProcessing: false
     }
   },
   created () {
@@ -124,15 +131,19 @@ export default {
   methods: {
     async fetchCategories () {
       try {
+        this.isLoading = true
         const { data } = await adminAPI.categories.get()
         this.categories = data.categories.map(category => {
           return {
             ...category,
             isEditing: false,
-            nameCached: ''
+            nameCached: '',
+            isProcessing: false
           }
         })
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法讀取類別資料，請稍後嘗試'
@@ -141,8 +152,16 @@ export default {
       }
     },
     async createCategory() {
-      // TODO: 透過 API 告知伺服器要新增的餐廳類別
       try {
+        if (!this.newCategoryName) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請輸入要新增的餐廳類別'
+          })
+          return
+        }
+        
+        this.isProcessing = true
         const { data } = await adminAPI.categories.create({ name: this.newCategoryName })
         if (data.status !== 'success') {
           throw new Error(data.message)
@@ -154,7 +173,9 @@ export default {
           updatedAt: format(new Date(), "yyyy-MM-dd'T'HH:mm:ss.SSSxxx")
         })
         this.newCategoryName = ''
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: 'error',
           title: error.message ? error.message : '無法建立新類別，請稍後再試'
@@ -162,8 +183,27 @@ export default {
         console.log('error: ', error)
       }
     },
-    deleteCategory(categoryId) {
-      this.categories = this.categories.filter(category => category.id !== categoryId)
+    async deleteCategory(categoryId) {
+      const category = this.categories.find(category => category.id === categoryId)
+      try {
+        category.isProcessing = true
+        const { data } = await adminAPI.categories.delete({ categoryId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.categories = this.categories.filter(category => category.id !== categoryId)
+        Toast.fire({
+          icon: 'success',
+          title: '成功刪除餐廳類別'
+        })
+      } catch (error) {
+        category.isProcessing = false
+        Toast.fire({
+          icon: 'error',
+          title: '無法刪除餐廳類別，請稍後再試'
+        })
+        console.log('error: ', error)
+      }
     },
     toggleIsEditing (categoryId) {
       this.categories = this.categories.map(category => {
