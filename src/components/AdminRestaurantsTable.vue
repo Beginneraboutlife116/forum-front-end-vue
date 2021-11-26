@@ -62,9 +62,16 @@ import adminAPI from '@/apis/admin.js'
 import { Toast } from '@/mixins/helpers.js'
 
 export default {
+  props: {
+    initialIsLoading: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
-      restaurants: []
+      restaurants: [],
+      isLoading: this.initialIsLoading
     }
   },
   created () {
@@ -73,9 +80,15 @@ export default {
   methods: {
     async fetchRestaurants () {
       try {
+        this.isLoading = true
+        this.$emit('toggle-is-loading', this.isLoading)
         const { data } = await adminAPI.restaurants.get()
-        this.restaurants = data.restaurants 
+        this.restaurants = data.restaurants
+        this.isLoading = false
+        this.$emit('toggle-is-loading', this.isLoading)
       } catch (error) {
+        this.isLoading = false
+        this.$emit('toggle-is-loading', this.isLoading)
         Toast.fire({
           icon: 'error',
           title: '無法讀取餐廳資料，請稍後再試'

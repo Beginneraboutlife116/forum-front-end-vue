@@ -195,6 +195,7 @@ export default {
       }
     },
     async deleteCategory(categoryId) {
+      // TODO: 需要提醒管理者，是否要刪除已有餐廳項目的餐廳類別
       const category = this.categories.find(category => category.id === categoryId)
       try {
         category.isProcessing = true
