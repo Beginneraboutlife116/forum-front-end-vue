@@ -79,7 +79,7 @@ export default {
           icon: 'error',
           title: '無法取得餐廳資料，請稍後再試'
         })
-        console.log('error: ', error)
+        // console.log('error: ', error)
       }
     }
   }

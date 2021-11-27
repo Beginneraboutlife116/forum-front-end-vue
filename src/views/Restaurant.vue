@@ -18,18 +18,9 @@
 import RestaurantDetail from './../components/RestaurantDetail.vue'
 import RestaurantComments from './../components/RestaurantComments.vue'
 import CreateComment from '../components/CreateComment.vue'
-import { forRestaurantAndRestaurantDashboard as dummyData } from '../fakedata/dummyDatas'
-
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "root",
-    email: "root@example.com",
-    image: null,
-    isAdmin: true
-  },
-  isAuthenticated: true
-}
+import restaurantsAPI from '@/apis/restaurants.js'
+import { Toast } from '@/mixins/helpers.js'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Restaurant',
@@ -53,34 +44,42 @@ export default {
         isFavorited: false,
         isLiked: false
       },
-      restaurantComments: [],
-      currentUser: dummyUser.currentUser
+      restaurantComments: []
     }
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
   created() {
     const { id: restaurantId } = this.$route.params
-    // 再出發fetchRestaurant前，先取得id
     this.fetchRestaurant(restaurantId)
   },
   methods: {
-    fetchRestaurant(restaurantId) {
-      console.log(restaurantId)
-      const { restaurant, isFavorited, isLiked } = dummyData
-      const { id, name, tel, address, opening_hours, description, image, CategoryId } = restaurant
-      this.restaurant = {
-        id,
-        name,
-        tel,
-        address,
-        openingHours: opening_hours,
-        description,
-        image,
-        categoryId: CategoryId,
-        categoryName: restaurant.Category.name || '未分類',
-        isFavorited,
-        isLiked
+    async fetchRestaurant(restaurantId) {
+      try {
+        const { data } = await restaurantsAPI.getRestaurant({ restaurantId })
+        const { restaurant, isFavorited, isLiked } = data
+        const { id, name, tel, address, opening_hours, description, image, CategoryId } = restaurant
+        this.restaurant = {
+          id,
+          name,
+          tel,
+          address,
+          openingHours: opening_hours,
+          description,
+          image,
+          categoryId: CategoryId,
+          categoryName: restaurant.Category.name || '未分類',
+          isFavorited,
+          isLiked
+        }
+        this.restaurantComments = restaurant.Comments
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法讀取餐廳資料，請稍後再試'
+        })
       }
-      this.restaurantComments = dummyData.restaurant.Comments
     },
     afterDeleteComment(commentId) {
       this.restaurantComments = this.restaurantComments.filter(comment => comment.id !== commentId)
@@ -98,6 +97,11 @@ export default {
         createdAt: new Date()
       })
     }
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id } = to.params
+    this.fetchRestaurant(id)
+    next()
   }
 }
 </script>

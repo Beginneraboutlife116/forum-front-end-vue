@@ -38,7 +38,7 @@
 
 <script>
 import { fromNowFilter } from '../mixins/fromNowFilter'
-import { currentUserForNavbarAndRestaurantCommentsAndAdminUsers as dummyUser} from '../fakedata/dummyDatas.js'
+import { mapState } from 'vuex'
 
 export default {
   name: 'RestaurantComments',
@@ -49,13 +49,8 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      currentUser: {}
-    }
-  },
-  created() {
-    this.fetchUser()
+  computed: {
+    ...mapState(['currentUser'])
   },
   methods: {
     handleDeleteButtonClick(commentId) {
@@ -63,9 +58,6 @@ export default {
       // TODO: 請求 API 伺服器刪除 id 為 commentId 的評論
       // 觸發父層事件 - $emit( '事件名稱' , 傳遞的資料 )
       this.$emit('after-delete-comment', commentId)
-    },
-    fetchUser() {
-      this.currentUser = { ...dummyUser.currentUser }
     }
   }
 }

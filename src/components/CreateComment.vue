@@ -6,7 +6,7 @@
         class="mb-2"
       >留下評論：</label>
       <textarea
-        v-model="text"
+        v-model.trim="text"
         class="form-control"
         rows="3"
         name="text"
@@ -31,7 +31,8 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from 'uuid'
+import commentsAPI from '@/apis/comments.js'
+import { Toast } from '@/mixins/helpers.js'
 
 export default {
   props: {
@@ -46,15 +47,28 @@ export default {
     }
   },
   methods: {
-    handleSubmit() {
-      // TODO: 向 API 發送 POST 請求
-      // 伺服器新增 Comment 成功後...
-      this.$emit('after-create-comment', {
-        commentId: uuidv4(), // 尚未串接 API 暫時使用隨機的 id
-        restaurantId: this.restaurantId,
-        text: this.text
-      })
-      this.text = '' // 將表單內的資料清空
+    async handleSubmit() {
+      try {
+        if (!this.text.length) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請輸入評論'
+          })
+          return
+        }
+        const { data } = await commentsAPI.createComment({ text: this.text, restaurantId: this.restaurantId })
+        this.$emit('after-create-comment', {
+          commentId: data.commentId,
+          restaurantId: this.restaurantId,
+          text: this.text
+        })
+        this.text = ''
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法新增評論，請稍後再試'
+        })
+      }
     }
   }
 }

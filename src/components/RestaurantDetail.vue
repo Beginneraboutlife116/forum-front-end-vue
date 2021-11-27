@@ -9,7 +9,7 @@
     <div class="col-lg-4">
       <img
         class="img-fluid d-block mx-auto" 
-        :src="restaurant.image || emptyImage"
+        :src="restaurant.image | emptyImage"
         style="width: 250px; margin-bottom: 25px;"
       >
       <div class="contact-info-wrap">
@@ -90,6 +90,14 @@ export default {
     return {
       restaurant: this.initialRestaurant
       // 留意這是淺拷貝的問題
+    }
+  },
+  watch: {
+    initialRestaurant(newValue) {
+      this.restaurant = {
+        ...this.restaurant,
+        ...newValue
+      }
     }
   },
   methods: {
