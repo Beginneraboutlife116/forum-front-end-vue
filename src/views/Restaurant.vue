@@ -3,7 +3,7 @@
     <RestaurantDetail :initial-restaurant="restaurant" />
 
     <RestaurantComments
-      :restaurant-comments="restaurantComments"
+      :initial-restaurant-comments="restaurantComments"
       @after-delete-comment="afterDeleteComment"
     />
     <!-- 新增評論 CreateComment -->
