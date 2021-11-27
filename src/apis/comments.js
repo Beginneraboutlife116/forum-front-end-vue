@@ -2,11 +2,16 @@ import { apiHelper } from '../mixins/helpers';
 const getToken = () => localStorage.getItem('token')
 
 export default {
-  createComment({ text, restaurantId }) {
+  create({ text, restaurantId }) {
     return apiHelper.post('/comments', {
       text,
       restaurantId
     }, {
+      headers: { Authorization: `Bearer ${getToken()}` }
+    })
+  },
+  delete({ commentId }) {
+    return apiHelper.delete(`/comments/${commentId}`, {
       headers: { Authorization: `Bearer ${getToken()}` }
     })
   }

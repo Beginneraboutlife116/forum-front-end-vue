@@ -23,8 +23,9 @@
       <button
         type="submit"
         class="btn btn-primary me-0"
+        :disabled="isProcessing"
       >
-        Submit
+        {{ isProcessing ? 'Updating...' : 'Submit' }}
       </button>
     </div>
   </form>
@@ -43,7 +44,8 @@ export default {
   },
   data() {
     return {
-      text: ''
+      text: '',
+      isProcessing: false
     }
   },
   methods: {
@@ -56,14 +58,20 @@ export default {
           })
           return
         }
-        const { data } = await commentsAPI.createComment({ text: this.text, restaurantId: this.restaurantId })
+        this.isProcessing = true
+        const { data } = await commentsAPI.create({ text: this.text, restaurantId: this.restaurantId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
         this.$emit('after-create-comment', {
           commentId: data.commentId,
           restaurantId: this.restaurantId,
           text: this.text
         })
         this.text = ''
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         Toast.fire({
           icon: 'error',
           title: '無法新增評論，請稍後再試'

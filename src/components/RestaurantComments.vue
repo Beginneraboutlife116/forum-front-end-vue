@@ -39,6 +39,8 @@
 <script>
 import { fromNowFilter } from '../mixins/fromNowFilter'
 import { mapState } from 'vuex'
+import { Toast } from '@/mixins/helpers.js'
+import commentsAPI from '@/apis/comments.js'
 
 export default {
   name: 'RestaurantComments',
@@ -53,11 +55,24 @@ export default {
     ...mapState(['currentUser'])
   },
   methods: {
-    handleDeleteButtonClick(commentId) {
-      console.log('handleDeleteButtonClick: ', commentId)
-      // TODO: 請求 API 伺服器刪除 id 為 commentId 的評論
-      // 觸發父層事件 - $emit( '事件名稱' , 傳遞的資料 )
-      this.$emit('after-delete-comment', commentId)
+    async handleDeleteButtonClick(commentId) {
+      try {
+        const { data } = await commentsAPI.delete({ commentId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        Toast.fire({
+          icon: 'success',
+          title: '成功刪除評論'
+        })
+        this.$emit('after-delete-comment', commentId)
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法刪除該筆評論，請稍後再試'
+        })
+        console.log('error: ', error)
+      }
     }
   }
 }
