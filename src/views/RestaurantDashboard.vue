@@ -73,7 +73,7 @@ export default {
       }
     }
   },
-  beforeRouteUpdate(to, next) {
+  beforeRouteUpdate(to, from, next) {
     const { id } = to.params
     this.fetchRestaurantForDashboard(id)
     next()

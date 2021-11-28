@@ -37,10 +37,9 @@
           <p />
           <form
             style="display: contents;"
-            @submit.stop.prevent="followOrUnfollow"
           >
             <router-link
-              v-if="profile.isAdmin"
+              v-if="profile.id === currentUser.id"
               class="btn btn-primary"
               :to="{name: 'user-edit', params: {id: profile.id}}"
             >
@@ -50,6 +49,7 @@
               v-else-if="!isFollowed"
               class="btn btn-primary"
               type="submit"
+              @click.stop.prevent="addFollowing(profile.id)"
             >
               追蹤
             </button>
@@ -57,6 +57,7 @@
               v-else
               class="btn btn-danger"
               type="submit"
+              @click.stop.prevent="deleteFollowing(profile.id)"
             >
               取消追蹤
             </button>
@@ -69,6 +70,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import usersAPI from '@/apis/users.js'
+import { Toast } from '@/mixins/helpers.js'
+
 export default {
   name: 'UserProfileCard',
   props: {
@@ -83,13 +88,50 @@ export default {
   },
   data() {
     return {
-      isFollowed: this.initialIsFollowed,
+      isFollowed: false,
+    }
+  },
+  computed: {
+    ...mapState(['currentUser'])
+  },
+  watch: {
+    initialIsFollowed(newValue) {
+      this.isFollowed = newValue
     }
   },
   methods: {
     followOrUnfollow() {
       if (this.isAdmin) return
       this.isFollowed ? (this.isFollowed = false) : (this.isFollowed = true)
+    },
+    async addFollowing(userId) {
+      try {
+        const { data } = await usersAPI.followUser({ userId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.isFollowed = true
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法追蹤此使用者，請稍後再試'
+        })
+      }
+    },
+    async deleteFollowing(userId) {
+      try {
+        const { data } = await usersAPI.cancelFollowUser({ userId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.isFollowed = false
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: '無法取消追蹤此使用者，請稍後再試'
+        })
+        console.log('error: ', error)
+      }
     }
   }
 }
