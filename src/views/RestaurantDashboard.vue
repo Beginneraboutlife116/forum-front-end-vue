@@ -25,7 +25,8 @@
 </template>
 
 <script>
-import { forRestaurantAndRestaurantDashboard as dummyData } from '../fakedata/dummyDatas'
+import restaurantsAPI from '@/apis/restaurants.js'
+import { Toast } from '@/mixins/helpers.js'
 
 export default {
   name: 'RestaurantDashboard',
@@ -41,20 +42,35 @@ export default {
     }
   },
   created() {
-    this.fetchRestaurantForDashboard()
+    const { id: restaurantId } = this.$route.params
+    this.fetchRestaurantForDashboard(restaurantId)
   },
   methods: {
-    fetchRestaurantForDashboard() {
-      const { restaurant } = dummyData
-      const { id, name, viewCounts, Category, Comments } = restaurant
-      this.restaurant = {
-        id,
-        name,
-        viewCounts,
-        category: Category,
-        comments: Comments,
+    async fetchRestaurantForDashboard(restaurantId) {
+      try {
+        const { data } = await restaurantsAPI.getRestaurant({ restaurantId })
+        const { restaurant } = data
+        const { id, name, viewCounts, Category, Comments } = restaurant
+        this.restaurant = {
+          id,
+          name,
+          viewCounts,
+          category: Category,
+          comments: Comments,
+        }
+
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得餐廳資訊，請稍後再試'
+        })
       }
     }
+  },
+  beforeRouteUpdate(to, next) {
+    const { id } = to.params
+    this.fetchRestaurantForDashboard(id)
+    next()
   }
 }
 </script>
