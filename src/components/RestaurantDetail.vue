@@ -50,7 +50,7 @@
         v-else
         type="button"
         class="btn btn-primary btn-border me-2"
-        @click.stop.prevent="addToFavorite"
+        @click.stop.prevent="addToFavorite(restaurant.id)"
       >
         加到最愛
       </button>
@@ -76,6 +76,8 @@
 
 <script>
 import emptyImageFilter from './../mixins/emptyImageFilter.js'
+import usersAPI from '@/apis/users.js'
+import { Toast } from '@/mixins/helpers.js'
 
 export default {
   name: 'RestaurantDetail',
@@ -88,8 +90,7 @@ export default {
   },
   data() {
     return {
-      restaurant: this.initialRestaurant
-      // 留意這是淺拷貝的問題
+      restaurant: {}
     }
   },
   watch: {
@@ -101,10 +102,22 @@ export default {
     }
   },
   methods: {
-    addToFavorite() {
-      this.restaurant = {
-        ...this.initialRestaurant,
-        isFavorited: true
+    async addToFavorite(restaurantId) {
+      try {
+        const { data } = await usersAPI.addToFavorite({ restaurantId })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.restaurant = {
+          ...this.restaurant,
+          isFavorited: true
+        }
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法新增餐廳到最愛，請稍後再試'
+        })
+        console.log('error: ', error, error.message)
       }
     },
     deleteFromFavorite() {
