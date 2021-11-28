@@ -1,5 +1,8 @@
 <template>
-  <div class="container py-5">
+  <div
+    v-show="!isLoading"
+    class="container py-5"
+  >
     <div>
       <h1>{{ restaurant.name }}</h1>
       <span class="badge bg-secondary mt-1 mb-3">
@@ -39,6 +42,7 @@ export default {
         comments: [],
         viewCounts: 0
       },
+      isLoading: false
     }
   },
   created() {
@@ -48,6 +52,7 @@ export default {
   methods: {
     async fetchRestaurantForDashboard(restaurantId) {
       try {
+        this.isLoading = true
         const { data } = await restaurantsAPI.getRestaurant({ restaurantId })
         const { restaurant } = data
         const { id, name, viewCounts, Category, Comments } = restaurant
@@ -58,8 +63,9 @@ export default {
           category: Category,
           comments: Comments,
         }
-
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法取得餐廳資訊，請稍後再試'
