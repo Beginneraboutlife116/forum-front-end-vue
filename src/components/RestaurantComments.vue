@@ -54,8 +54,7 @@ export default {
   },
   data() {
     return {
-      restaurantComments: [],
-      isLoading: false
+      restaurantComments: []
     }
   },
   computed: {

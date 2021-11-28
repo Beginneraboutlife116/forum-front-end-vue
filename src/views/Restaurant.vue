@@ -1,5 +1,8 @@
 <template>
-  <div class="container py-5">
+  <div
+    v-show="!isLoading"
+    class="container py-5"
+  >
     <RestaurantDetail :initial-restaurant="restaurant" />
 
     <RestaurantComments
@@ -44,7 +47,8 @@ export default {
         isFavorited: false,
         isLiked: false
       },
-      restaurantComments: []
+      restaurantComments: [],
+      isLoading: false
     }
   },
   computed: {
@@ -57,6 +61,7 @@ export default {
   methods: {
     async fetchRestaurant(restaurantId) {
       try {
+        this.isLoading = true
         const { data } = await restaurantsAPI.getRestaurant({ restaurantId })
         const { restaurant, isFavorited, isLiked } = data
         const { id, name, tel, address, opening_hours, description, image, CategoryId } = restaurant
@@ -74,7 +79,9 @@ export default {
           isLiked
         }
         this.restaurantComments = restaurant.Comments
+        this.isLoading = false
       } catch(error) {
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法讀取餐廳資料，請稍後再試'
