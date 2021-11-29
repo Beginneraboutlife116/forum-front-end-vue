@@ -36,7 +36,7 @@
               type="button"
               :class="['btn', 'btn-link', 'text-decoration-none', {invisible: user.name === 'root' && currentUser.isAdmin}]"
               :disabled="!currentUser.isAdmin"
-              @click.stop.prevent="toggleIsAdmin(user.id)"
+              @click.stop.prevent="toggleIsAdmin(user.id, user.isAdmin)"
             >
               {{ user.isAdmin ? 'set as user' : 'set as admin' }}
             </button>
@@ -49,8 +49,9 @@
 
 <script>
 import AdminNav from '../components/AdminNav.vue'
-import {usersForAdminUsers as dummyUsers} from '../fakedata/dummyDatas.js'
-import { currentUserForNavbarAndRestaurantCommentsAndAdminUsers as dummyUser} from '../fakedata/dummyDatas.js'
+import adminAPI from '@/apis/admin.js'
+import { Toast } from '@/mixins/helpers.js'
+import { mapState } from 'vuex'
 
 export default {
   name: 'AdminUsers',
@@ -59,29 +60,56 @@ export default {
   },
   data() {
     return {
-      users: [],
-      currentUser: {}
+      users: []
     }
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
   created() {
     this.fetchUsers()
   },
   methods: {
-    fetchUsers() {
-      this.users = dummyUsers.users
-      this.currentUser = dummyUser.currentUser
+    async fetchUsers() {
+      try {
+        const { data } = await adminAPI.users.getUsers()
+        this.users = data.users
+      } catch(error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法讀取所有使用者資料，請稍後再試'
+        })
+      }
     },
-    toggleIsAdmin(userId) {
+    async toggleIsAdmin(userId, isAdmin) {
       // TODO: 之後需要將這個值回傳給後端，做修改
-      this.users = this.users.map(user => {
-        if (user.id === userId) {
-          return {
-            ...user,
-            isAdmin: !user.isAdmin
-          }
+      try {
+        const willBeAdmin = !isAdmin
+        const { data } = await adminAPI.users.toggleIsAdmin({ userId, isAdmin: willBeAdmin.toString() })
+        // 變成string的理由：因為service檔案中，是使用'true'來比對
+        if (data.status !== 'success') {
+          throw new Error(data.message)
         }
-        return user
-      })
+        this.users = this.users.map(user => {
+          if (user.id === userId) {
+            return {
+              ...user,
+              isAdmin: willBeAdmin
+            }
+          }
+          return user
+        })
+        Toast.fire({
+          icon: 'success',
+          title: '成功更新使用者資料'
+        })
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法更新使用者資料，請稍後再試'
+        })
+        console.log('error: ', error)
+      }
     }
   }
 }
