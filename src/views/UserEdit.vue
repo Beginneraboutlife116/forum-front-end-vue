@@ -1,6 +1,6 @@
 <template>
   <div class="container py-5">
-    <form @submit.stop.prevent="handleSubmit">
+    <form @submit.stop.prevent="handleSubmit(id)">
       <div class="mb-3">
         <label for="name">Name</label>
         <input
@@ -36,6 +36,7 @@
       <button
         type="submit"
         class="btn btn-primary"
+        :disabled="isProcessing"
       >
         Submit
       </button>
@@ -45,6 +46,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import { Toast } from '@/mixins/helpers.js'
+import usersAPI from '@/apis/users.js'
 
 export default {
   name: 'UserEdit',
@@ -52,7 +55,8 @@ export default {
     return {
       id: -1,
       name: '',
-      image: ''
+      image: '',
+      isProcessing: false
     }
   },
   computed: {
@@ -90,11 +94,34 @@ export default {
         this.image = imageURL
       }
     },
-    handleSubmit() {
-      const form = event.target
-      const formData = new FormData(form)
-      for (let [key, value] of formData.entries()) {
-        console.log(key, ' : ', value)
+    async handleSubmit(userId) {
+      try {
+        if (!this.name.length) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請至少輸入名稱'
+          })
+          return
+        }
+        this.isProcessing = true
+        const form = event.target
+        const formData = new FormData(form)
+        const { data } = await usersAPI.update({ userId, formData })
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        Toast.fire({
+          icon: 'success',
+          title: '已更新使用者資料'
+        })
+        this.isProcessing = false
+      } catch(error) {
+        this.isProcessing = false
+        Toast.fire({
+          icon: 'error',
+          title: '無法更新資料，請稍後再試'
+        })
+        console.log('error: ', error)
       }
     }
   }
