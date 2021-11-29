@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { forUserAndUserEdit as dummyData } from '../fakedata/dummyDatas'
+import { mapState } from 'vuex'
 
 export default {
   name: 'UserEdit',
@@ -55,15 +55,31 @@ export default {
       image: ''
     }
   },
+  computed: {
+    ...mapState(['currentUser'])
+  },
+  watch: {
+    currentUser() {
+      this.setUser(this.currentUser.id)
+    }
+  },
   created() {
-    this.fetchUser()
+    this.setUser(this.currentUser.id)
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id: userId } = to.params
+    this.setUser(userId)
+    next()
   },
   methods: {
-    fetchUser() {
-      const { profile } = dummyData
-      this.id = profile.id
-      this.name = profile.name
-      this.image = profile.image
+    setUser(userId) {
+      if (userId.toString() !== this.$route.params.id.toString()) {
+        this.$router.replace({ name: 'not-found' })
+        return
+      }
+      this.id = this.currentUser.id
+      this.name = this.currentUser.name
+      this.image = this.currentUser.image
     },
     handleFileChange() {
       const filesList = event.target.files
