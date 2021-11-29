@@ -87,6 +87,8 @@ export default {
         const willBeAdmin = !isAdmin
         const { data } = await adminAPI.users.toggleIsAdmin({ userId, isAdmin: willBeAdmin.toString() })
         // 變成string的理由：因為service檔案中，是使用'true'來比對
+        // 一定要存取此職的原因是因為，如果直接使用 !isAdmin.toString()，就會一直得到false
+        // 因為字串是true，而驚嘆號會永遠轉false！
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
@@ -94,7 +96,7 @@ export default {
           if (user.id === userId) {
             return {
               ...user,
-              isAdmin: willBeAdmin
+              isAdmin: !isAdmin
             }
           }
           return user
