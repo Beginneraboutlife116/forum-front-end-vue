@@ -1,77 +1,81 @@
 <template>
-  <table class="table">
-    <thead class="table-dark">
-      <tr>
-        <th scope="col">
-          #
-        </th>
-        <th scope="col">
-          Category
-        </th>
-        <th scope="col">
-          Name
-        </th>
-        <th
-          scope="col"
-          width="300"
+  <div>
+    <Spinner v-if="isLoading" />
+    <table
+      v-else
+      class="table"
+    >
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">
+            #
+          </th>
+          <th scope="col">
+            Category
+          </th>
+          <th scope="col">
+            Name
+          </th>
+          <th
+            scope="col"
+            width="300"
+          >
+            操作
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="restaurant in restaurants"
+          :key="restaurant.id"
         >
-          操作
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        v-for="restaurant in restaurants"
-        :key="restaurant.id"
-      >
-        <th scope="row">
-          {{ restaurant.id }}
-        </th>
-        <td>{{ restaurant.Category ? restaurant.Category.name : '未分類' }}</td>
-        <td>{{ restaurant.name }}</td>
-        <td class="d-flex justify-content-between">
-          <router-link
-            :to="{name: 'admin-restaurant', params: {id: restaurant.id }}"
-            class="btn btn-link text-decoration-none"
-          >
-            Show
-          </router-link>
+          <th scope="row">
+            {{ restaurant.id }}
+          </th>
+          <td>{{ restaurant.Category ? restaurant.Category.name : '未分類' }}</td>
+          <td>{{ restaurant.name }}</td>
+          <td class="d-flex justify-content-between">
+            <router-link
+              :to="{name: 'admin-restaurant', params: {id: restaurant.id }}"
+              class="btn btn-link text-decoration-none"
+            >
+              Show
+            </router-link>
 
-          <router-link
-            :to="{name: 'admin-restaurant-edit', params: { id: restaurant.id }}"
-            class="btn btn-link text-decoration-none"
-          >
-            Edit
-          </router-link>
+            <router-link
+              :to="{name: 'admin-restaurant-edit', params: { id: restaurant.id }}"
+              class="btn btn-link text-decoration-none"
+            >
+              Edit
+            </router-link>
 
-          <button
-            type="button"
-            class="btn btn-link text-decoration-none"
-            @click.stop.prevent="deleteRestaurant(restaurant.id)"
-          >
-            Delete
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+            <button
+              type="button"
+              class="btn btn-link text-decoration-none"
+              @click.stop.prevent="deleteRestaurant(restaurant.id)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
 import adminAPI from '@/apis/admin.js'
 import { Toast } from '@/mixins/helpers.js'
+import Spinner from './../components/Spinner.vue'
 
 export default {
-  props: {
-    initialIsLoading: {
-      type: Boolean,
-      default: false
-    }
+  components: {
+    Spinner
   },
   data () {
     return {
       restaurants: [],
-      isLoading: this.initialIsLoading
+      isLoading: true
     }
   },
   created () {
@@ -80,7 +84,6 @@ export default {
   methods: {
     async fetchRestaurants () {
       try {
-        this.isLoading = true
         this.$emit('toggle-is-loading', this.isLoading)
         const { data } = await adminAPI.restaurants.get()
         this.restaurants = data.restaurants

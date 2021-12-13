@@ -1,20 +1,24 @@
 <template>
   <div class="container py-5">
     <NavTabs />
-    <h1 class="mt-5">
-      人氣餐廳
-    </h1>
-    <hr>
-    <TopRestaurantCard
-      v-for="restaurant of restaurants"
-      :key="restaurant.id"
-      :initial-restaurant="restaurant"
-    />
+    <Spinner v-if="isLoading" />
+    <template>
+      <h1 class="mt-5">
+        人氣餐廳
+      </h1>
+      <hr>
+      <TopRestaurantCard
+        v-for="restaurant of restaurants"
+        :key="restaurant.id"
+        :initial-restaurant="restaurant"
+      />
+    </template>
   </div>
 </template>
 
 <script>
 import TopRestaurantCard from '../components/TopRestaurantCard.vue'
+import Spinner from './../components/Spinner.vue'
 import restaurantsAPI from '@/apis/restaurants.js'
 import { Toast } from '@/mixins/helpers.js'
 
@@ -23,7 +27,8 @@ export default {
   name: 'RestaurantsTop',
   components: {
     NavTabs,
-    TopRestaurantCard
+    TopRestaurantCard,
+    Spinner
   },
   data() {
     return {

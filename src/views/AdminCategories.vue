@@ -1,6 +1,5 @@
 <template>
   <div
-    v-show="!isLoading"
     class="container py-5"
   >
     <AdminNav />
@@ -27,7 +26,11 @@
         </div>
       </div>
     </form>
-    <table class="table">
+    <Spinner v-if="isLoading" />
+    <table
+      v-else
+      class="table"
+    >
       <thead class="table-dark">
         <tr>
           <th
@@ -112,17 +115,19 @@ import AdminNav from '@/components/AdminNav'
 import format from 'date-fns/format'
 import adminAPI from '@/apis/admin.js'
 import { Toast } from '@/mixins/helpers.js'
+import Spinner from './../components/Spinner.vue'
 
 export default {
   name: 'AdminCategories',
   components: {
-    AdminNav
+    AdminNav,
+    Spinner
   },
   data () {
     return {
       categories: [],
       newCategoryName: '',
-      isLoading: false,
+      isLoading: true,
       isProcessing: false
     }
   },
@@ -132,7 +137,6 @@ export default {
   methods: {
     async fetchCategories () {
       try {
-        this.isLoading = true
         const { data } = await adminAPI.categories.get()
         this.categories = data.categories.map(category => {
           return {

@@ -50,8 +50,13 @@ export default {
 
 <style scoped>
 .nav-tabs {
-  border-bottom: 1px solid #bd2333;
+  border-bottom: 1px solid #bd2333; 
 }
+
+.nav-tabs .nav-link {
+  color: #bd2333;
+}
+
 .nav-tabs .nav-link:focus,
 .nav-tabs .nav-link:hover,
 .nav-tabs .nav-item.show .nav-link,

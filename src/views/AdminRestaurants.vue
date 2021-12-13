@@ -1,6 +1,5 @@
 <template>
   <div
-    v-show="!isLoading"
     class="container py-5"
   >
     <AdminNav />
@@ -11,7 +10,6 @@
       New Restaurant
     </router-link>
     <AdminRestaurantsTable
-      :initial-is-loading="isLoading"
       @toggle-is-loading="toggleIsLoading"
     />
   </div>
@@ -26,11 +24,6 @@ export default {
   components: {
     AdminNav,
     AdminRestaurantsTable
-  },
-  data() {
-    return {
-      isLoading: false
-    }
   },
   methods: {
     toggleIsLoading(isLoading) {

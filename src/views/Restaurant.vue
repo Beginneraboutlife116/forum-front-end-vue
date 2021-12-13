@@ -1,19 +1,19 @@
 <template>
-  <div
-    v-show="!isLoading"
-    class="container py-5"
-  >
-    <RestaurantDetail :initial-restaurant="restaurant" />
+  <div class="container py-5">
+    <Spinner v-if="isLoading" />
+    <template v-else>
+      <RestaurantDetail :initial-restaurant="restaurant" />
 
-    <RestaurantComments
-      :initial-restaurant-comments="restaurantComments"
-      @after-delete-comment="afterDeleteComment"
-    />
-    <!-- 新增評論 CreateComment -->
-    <CreateComment
-      :restaurant-id="restaurant.id"
-      @after-create-comment="afterCreateComment"
-    />
+      <RestaurantComments
+        :initial-restaurant-comments="restaurantComments"
+        @after-delete-comment="afterDeleteComment"
+      />
+      <!-- 新增評論 CreateComment -->
+      <CreateComment
+        :restaurant-id="restaurant.id"
+        @after-create-comment="afterCreateComment"
+      />
+    </template>
   </div>
 </template>
 
@@ -24,13 +24,15 @@ import CreateComment from '../components/CreateComment.vue'
 import restaurantsAPI from '@/apis/restaurants.js'
 import { Toast } from '@/mixins/helpers.js'
 import { mapState } from 'vuex'
+import Spinner from './../components/Spinner.vue'
 
 export default {
   name: 'Restaurant',
   components: {
     RestaurantDetail,
     RestaurantComments,
-    CreateComment
+    CreateComment,
+    Spinner
   },
   data() {
     return {
@@ -48,7 +50,7 @@ export default {
         isLiked: false
       },
       restaurantComments: [],
-      isLoading: false
+      isLoading: true
     }
   },
   computed: {

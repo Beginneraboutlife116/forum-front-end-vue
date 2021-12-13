@@ -1,14 +1,14 @@
 <template>
-  <div
-    v-show="!isLoading"
-    class="container py-5"
-  >
-    <div>
-      <h1>{{ restaurant.name }}</h1>
-      <span class="badge bg-secondary mt-1 mb-3">
-        {{ restaurant.category.name }}
-      </span>
-    </div>
+  <div class="container py-5">
+    <Spinner v-if="isLoading" />
+    <template v-else>
+      <div>
+        <h1>{{ restaurant.name }}</h1>
+        <span class="badge bg-secondary mt-1 mb-3">
+          {{ restaurant.category.name }}
+        </span>
+      </div>
+    </template>
 
     <hr>
 
@@ -30,9 +30,13 @@
 <script>
 import restaurantsAPI from '@/apis/restaurants.js'
 import { Toast } from '@/mixins/helpers.js'
+import Spinner from './../components/Spinner.vue'
 
 export default {
   name: 'RestaurantDashboard',
+  components: {
+    Spinner
+  },
   data() {
     return {
       restaurant: {
@@ -42,7 +46,7 @@ export default {
         comments: [],
         viewCounts: 0
       },
-      isLoading: false
+      isLoading: true
     }
   },
   created() {
